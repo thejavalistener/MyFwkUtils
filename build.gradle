@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.github.thejavalistener'
+version = '1.0.6'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // LOG
+    implementation 'log4j:log4j:1.2.17'
+
+    // SPRING
+    implementation 'org.springframework:spring-context:5.3.14'
+    implementation 'org.springframework:spring-orm:5.3.14'
+    implementation 'org.springframework:spring-web:5.3.14'
+    implementation 'org.springframework:spring-context-support:5.3.14'
+
+    // JPA / Hibernate
+    implementation 'org.hibernate:hibernate-entitymanager:5.6.3.Final'
+
+    // DB / Spy
+    implementation 'org.hsqldb:hsqldb:2.7.0'
+    implementation 'p6spy:p6spy:3.9.1'
+
+    // Mail
+    implementation 'com.sun.mail:javax.mail:1.6.2'
+
+    // Utilidades
+    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'org.reflections:reflections:0.10.2'
+
+    // QR / Barcode
+    implementation 'com.google.zxing:core:3.5.2'
+    implementation 'com.google.zxing:javase:3.5.2'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

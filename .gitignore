@@ -1,0 +1,4 @@
+*.class
+spy.log
+bin/
+target/
