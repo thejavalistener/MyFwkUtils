@@ -62,22 +62,6 @@ public class ProgressMeter extends Progress
 			console.skipFwd();
 		}
 	}
-	
-	public static void main(String[] args)
-	{
-		MyConsole c = MyConsole.io;
-		c.print("Procesando: ");
-		
-		Progress p = c.progressMeter(100);
-		p.execute(()->{
-			for(int i=0; i<100; i++)
-			{
-				p.increase();
-				MyThread.randomSleep(200);
-			}
-		});
-	}
-
 }
 
 
