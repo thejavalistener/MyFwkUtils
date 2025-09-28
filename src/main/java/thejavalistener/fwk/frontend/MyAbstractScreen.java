@@ -110,4 +110,18 @@ public abstract class MyAbstractScreen extends MyAbstractScreenBase
 	{
 		getMyApp().getMyAppContainer().c().setTitle(title);
 	}
+	
+	private Map<?,?> currState = null;
+	public void setDisabledTemporally(boolean disable,java.awt.Component ...excepted)
+	{
+		if( disable )
+		{
+			currState = MyAwt.disableTemporally(this,excepted);
+		}
+		else
+		{
+			MyAwt.restoreDisabled(currState);			
+		}
+	}
+
 }

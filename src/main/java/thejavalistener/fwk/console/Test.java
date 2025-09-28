@@ -1,23 +1,17 @@
 package thejavalistener.fwk.console;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.SecondaryLoop;
-import java.awt.Toolkit;
-
-import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import thejavalistener.fwk.awt.MyAwt;
 import thejavalistener.fwk.util.MyThread;
-import thejavalistener.fwk.util.UTime;
 import thejavalistener.fwk.util.string.MyString;
 
 public class Test
 {
 	public static void main(String[] args) throws Exception
-	{
+	{		
 		MyAwt.setWindowsLookAndFeel();		
+		MyConsole.open("poopp",800,600);
 		MyConsole c = MyConsole.io;
 		
 		MyConsole.io.banner("You are Welcome!");
@@ -55,6 +49,7 @@ public class Test
 		c.println("Veo que "+x+" estás contento...");
 				
 		c.println("Press any key to finish...").pressAnyKey();
+		c.close();
 //		c.closeAndExit();
 //
 //		System.out.println("-----------------------------------------------------------");

@@ -1,6 +1,5 @@
 package thejavalistener.fwk.console;
 
-import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
@@ -13,16 +12,12 @@ import java.awt.event.MouseListener;
 
 import javax.swing.SwingUtilities;
 
-import thejavalistener.fwk.awt.MyAwt;
 import thejavalistener.fwk.util.MyCollection;
 import thejavalistener.fwk.util.string.MyString;
 
 //@Component
 public class MyConsole extends MyConsoleBase
 {	
-	// singleton
-	public static MyConsole io = null; 
-
 	// listeners
 	private EscuchaRead escuchaRead = null;
 	private EscuchaPressAnyKey escuchaPressAnyKey = null;
@@ -32,11 +27,15 @@ public class MyConsole extends MyConsoleBase
 	// bloqueo
     private SecondaryLoop secondaryLoop = null; 
     
-    static 
-    {
-    	MyAwt.setWindowsLookAndFeel();
-    	io = new MyConsole();
-    }
+//	public static void open(String title, int width, int height)
+//	{
+//	    JFrame frame = new JFrame(title != null ? title : "Console");
+//	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//	    frame.setSize(width > 0 ? width : 600, height > 0 ? height : 400);
+//	    frame.setContentPane(io.c()); // usa el contentPane de la instancia singleton
+//	    frame.setVisible(true);
+//	    io.mainWindow = frame; // opcional, si querés guardar referencia
+//	}
  
     private boolean _suggestCloseableMode()
     {
@@ -52,23 +51,11 @@ public class MyConsole extends MyConsoleBase
     }
 
 	public MyConsole()
-	{
-		this(false);
-		setClosable(_suggestCloseableMode());
-	}
-	
-	public MyConsole(boolean closeable)
 	{			
-		this.closable=closeable;
 		escuchaRead = new EscuchaRead();
 		escuchaPressAnyKey = new EscuchaPressAnyKey();
 		escuchaPassword = new EscuchaPassword();
 		escuchaMenu = new EscuchaMenu();
-	}
-	
-	public MyConsole(Container parent)
-	{
-		this(false);
 	}
 	
 	public void setWaiting(boolean wait)
@@ -95,7 +82,8 @@ public class MyConsole extends MyConsoleBase
 	protected String _readString(InputConfigurator iconfig)
 	{
 		init();
-		textPane.requestFocus();
+//		textPane.requestFocus();
+		textPane.c().requestFocusInWindow();
 		
 		escuchaRead.setInputConfig(iconfig);
 		
@@ -224,7 +212,8 @@ public class MyConsole extends MyConsoleBase
 	{
 		try
 		{
-			textPane.requestFocus();
+//			textPane.requestFocus();
+			textPane.c().requestFocusInWindow();
 			textPane.setEditable(true);
 			escuchaPressAnyKey.setRunnnableAndKey(r,k);
 			textPane.addKeyListener(escuchaPressAnyKey);
@@ -431,8 +420,9 @@ public class MyConsole extends MyConsoleBase
 	{
 		init();
 		
-		textPane.requestFocus();
-		
+//		textPane.requestFocus();
+		textPane.c().requestFocusInWindow();
+
 		try
 		{
 			// comienzo a escuchar

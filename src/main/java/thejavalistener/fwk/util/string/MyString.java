@@ -1295,4 +1295,24 @@ public class MyString
 	{
 		return s.endsWith(suff)?s.substring(0,s.lastIndexOf(suff)):s;
 	}
+	
+	public static String join(List<String> list, String sep) {
+	    if (list == null || list.isEmpty()) {
+	        return "";
+	    }
+	    StringBuilder sb = new StringBuilder();
+	    for (int i = 0; i < list.size(); i++) {
+	        sb.append(list.get(i));
+	        if (i < list.size() - 1) {
+	            sb.append(sep);
+	        }
+	    }
+	    return sb.toString();
+	}
+
+	public static String join(String[] array, String sep) 
+	{
+		return join(List.of(array),sep);
+	}
+	
 }

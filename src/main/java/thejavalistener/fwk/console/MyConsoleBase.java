@@ -23,6 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.text.StyledDocument;
@@ -59,8 +60,6 @@ public abstract class MyConsoleBase
 
 	protected int inputPosition;
 
-	protected boolean closable=false;
-
 	protected boolean initialized=false;
 
 	protected MyTextPane textPane;
@@ -69,9 +68,7 @@ public abstract class MyConsoleBase
 	
 	protected JPanel contentPane;
 	
-	
-	public Window mainWindow;
-	
+		
 	private List<MyConsoleListener> listeners = new ArrayList<>();
 
 	// STYLE
@@ -83,6 +80,7 @@ public abstract class MyConsoleBase
 	protected boolean reading=false;
 
 	private MyConsoleBase outer=null;
+	
 
 	public MyTextPane getTextPane()
 	{
@@ -140,7 +138,7 @@ public abstract class MyConsoleBase
 		contentPane = new MyBorderLayout();
 
 		textPane=new MyTextPane(false,true);
-		textPane.addKeyListener(new EscuchaCTRLCyESC());
+//		textPane.addKeyListener(new EscuchaCTRLCyESC());
 		scrollPane=new JScrollPane(textPane.c());
 		contentPane.add(scrollPane,BorderLayout.CENTER);
 						
@@ -748,15 +746,6 @@ public abstract class MyConsoleBase
 		return customStyles.get(customStyleName);
 	}
 
-	public void setClosable(boolean b)
-	{
-		this.closable=b;
-	}
-
-	public boolean isClosable()
-	{
-		return closable;
-	}
 
 	/**
 	 * Aplica el estilo $customStyle, que puede identificarse por nombre o por
@@ -933,44 +922,25 @@ public abstract class MyConsoleBase
 		}
 	}
 
-	class EscuchaWindow extends WindowAdapter implements WindowFocusListener
-	{
-		@Override
-		public void windowClosing(WindowEvent e)
-		{
-			if(closable)
-			{
-				close();
-			}
-		}
-
-		@Override
-		public void windowLostFocus(WindowEvent e)
-		{
-			((Container)e.getComponent()).requestFocus();
-			super.windowLostFocus(e);
-		}
-	}
-
-	public class EscuchaCTRLCyESC extends KeyAdapter
-	{
-		@Override
-		public void keyPressed(KeyEvent e)
-		{
-			if(e.isControlDown()&&e.getKeyCode()==KeyEvent.VK_C||e.getKeyCode()==KeyEvent.VK_ESCAPE)
-			{
-				e.consume();
-				if(!outer.isClosable())
-				{
-//					outer.closeAndExit();
-				}
-				else
-				{
-					outer.close();
-				}
-			}
-		}
-	}
+//	public class EscuchaCTRLCyESC extends KeyAdapter
+//	{
+//		@Override
+//		public void keyPressed(KeyEvent e)
+//		{
+//			if(e.isControlDown()&&e.getKeyCode()==KeyEvent.VK_C||e.getKeyCode()==KeyEvent.VK_ESCAPE)
+//			{
+//				e.consume();
+//				if(!outer.isClosable())
+//				{
+////					outer.closeAndExit();
+//				}
+//				else
+//				{
+//					outer.close();
+//				}
+//			}
+//		}
+//	}
 
 	public int getCaretPosition()
 	{

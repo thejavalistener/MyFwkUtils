@@ -18,7 +18,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hsqldb.server.Server;
 import org.reflections.Reflections;
 
-public class MyHQLConsole2
+public class MyHQLConsole2 
 {
 
 	private static String dbUrl;

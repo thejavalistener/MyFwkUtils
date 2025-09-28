@@ -18,9 +18,12 @@ import java.awt.event.ItemListener;
 import java.awt.font.TextAttribute;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 import javax.swing.JButton;
@@ -54,36 +57,68 @@ public class MyAwt
 		return getMainWindow(c.getParent()); // Llamada recursiva
 	}
 
-	// Método para deshabilitar temporalmente los componentes y guardar su
-	// estado
+//	// Método para deshabilitar temporalmente los componentes y guardar su
+//	// estado
+//	public static Map<Component,Boolean> disableTemporally(Container c)
+//	{
+//		Map<Component,Boolean> stateMap=new HashMap<>();
+//		_disableRecursively(c,stateMap);
+//		return stateMap; // Se retorna como Map<?, ?> para mayor flexibilidad
+//	}
+//
+//	private static void _disableRecursively(Container c, Map<Component,Boolean> stateMap)
+//	{
+//		if(!stateMap.containsKey(c))
+//		{
+//			stateMap.put(c,c.isEnabled()); // Guardar estado del contenedor
+//		}
+//		c.setEnabled(false); // Deshabilitar el contenedor
+//
+//		for(Component comp:c.getComponents())
+//		{
+//			if(!stateMap.containsKey(comp))
+//			{
+//				stateMap.put(comp,comp.isEnabled()); // Guardar estado del
+//														// componente
+//			}
+//			comp.setEnabled(false); // Deshabilitar el componente
+//
+//			if(comp instanceof Container)
+//			{
+//				_disableRecursively((Container)comp,stateMap); // Recursión para
+//																// subcontenedores
+//			}
+//		}
+//	}
+	
 	public static Map<Component,Boolean> disableTemporally(Container c)
 	{
-		Map<Component,Boolean> stateMap=new HashMap<>();
-		_disableRecursively(c,stateMap);
-		return stateMap; // Se retorna como Map<?, ?> para mayor flexibilidad
+		return disableTemporally(c,new Component[]{});
+	}
+	
+	public static Map<Component, Boolean> disableTemporally(Container c, Component... excepted) {
+		Map<Component, Boolean> stateMap = new HashMap<>();
+		Set<Component> excluded = new HashSet<>(Arrays.asList(excepted));
+		_disableRecursively(c, stateMap, excluded);
+		return stateMap;
 	}
 
-	private static void _disableRecursively(Container c, Map<Component,Boolean> stateMap)
-	{
-		if(!stateMap.containsKey(c))
-		{
-			stateMap.put(c,c.isEnabled()); // Guardar estado del contenedor
+	private static void _disableRecursively(Container c, Map<Component, Boolean> stateMap, Set<Component> excluded) {
+		if (!excluded.contains(c) && !stateMap.containsKey(c)) {
+			stateMap.put(c, c.isEnabled());
+			c.setEnabled(false);
 		}
-		c.setEnabled(false); // Deshabilitar el contenedor
 
-		for(Component comp:c.getComponents())
-		{
-			if(!stateMap.containsKey(comp))
-			{
-				stateMap.put(comp,comp.isEnabled()); // Guardar estado del
-														// componente
-			}
-			comp.setEnabled(false); // Deshabilitar el componente
+		for (Component comp : c.getComponents()) {
+			if (!excluded.contains(comp)) {
+				if (!stateMap.containsKey(comp)) {
+					stateMap.put(comp, comp.isEnabled());
+				}
+				comp.setEnabled(false);
 
-			if(comp instanceof Container)
-			{
-				_disableRecursively((Container)comp,stateMap); // Recursión para
-																// subcontenedores
+				if (comp instanceof Container) {
+					_disableRecursively((Container) comp, stateMap, excluded);
+				}
 			}
 		}
 	}
@@ -104,26 +139,53 @@ public class MyAwt
 		}
 	}
 
-	public static void setEnabled(Container c, boolean b)
+	public static void setEnabled(Container c,boolean b)
 	{
+		setEnabled(c,b,new Component[]{});
+	}
+	
+//	public static void setEnabled(Container c,boolean b,Container ...excepted)
+//	{
+//
+//		// Establecer el estado para el contenedor mismo
+//		c.setEnabled(b);
+//
+//		// Obtener todos los componentes dentro del contenedor
+//		Component[] components=c.getComponents();
+//		for(Component comp:components)
+//		{
+//			comp.setEnabled(b);
+//
+//			// Si el componente es un contenedor, llamar recursivamente
+//			if(comp instanceof Container)
+//			{
+//				setEnabled((Container)comp,b);
+//			}
+//		}
+//	}
 
-		// Establecer el estado para el contenedor mismo
-		c.setEnabled(b);
+	public static void setEnabled(Container c, boolean b, Component... aExcluded) {
+		// Convertir el array a un Set para búsqueda eficiente
+		Set<Component> excluded = new HashSet<>(Arrays.asList(aExcluded));
 
-		// Obtener todos los componentes dentro del contenedor
-		Component[] components=c.getComponents();
-		for(Component comp:components)
-		{
-			comp.setEnabled(b);
+		// Si el contenedor no está excluido, aplicar setEnabled
+		if (!excluded.contains(c)) {
+			c.setEnabled(b);
+		}
 
-			// Si el componente es un contenedor, llamar recursivamente
-			if(comp instanceof Container)
-			{
-				setEnabled((Container)comp,b);
+		// Iterar sobre los componentes internos
+		for (Component comp : c.getComponents()) {
+			if (!excluded.contains(comp)) {
+				comp.setEnabled(b);
+			}
+
+			// Si es un contenedor, aplicar recursivamente
+			if (comp instanceof Container) {
+				setEnabled((Container) comp, b, aExcluded);
 			}
 		}
-	}
-
+	}	
+	
 	public static <T> T getParent(Component component, Class<T> parentType)
 	{
 		Container parent=component.getParent();
@@ -461,5 +523,20 @@ public class MyAwt
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public static void pack(Window f, int maxW, int maxH) {
+	    f.pack();
+	    Dimension size = f.getSize();
+	    
+	    int width=(int)f.getSize().getWidth();
+	    if( maxW>0 )
+	    	width = Math.min(size.width, maxW);
+	    
+	    int height=(int)f.getSize().getHeight();
+	    if( maxH>0 )
+	    	height = Math.min(size.height, maxH);
+
+	    f.setSize(width, height);
 	}
 }
