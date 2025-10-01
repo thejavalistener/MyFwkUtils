@@ -19,6 +19,19 @@ public class MyCollection
 		return !isIn(t,args);
 	}
 	
+	public static <R,T> R[] toArray(List<T> lst,Function<T,R> tToR,Class<R> clazz)
+	{
+		return toArray(lst,tToR,f->true,clazz);
+	}
+	
+	public static <R, T> R[] toArray(List<T> lst, Function<T, R> tToR, Function<T, Boolean> filter, Class<R> clazz)
+	{
+	    return lst.stream()
+	        .filter(filter::apply)
+	        .map(tToR::apply)
+	        .toArray(size -> (R[]) Array.newInstance(clazz, size));
+	}	
+	
 	public static <T> boolean isIn(T t,T ...args)
 	{
 		if(t!=null )

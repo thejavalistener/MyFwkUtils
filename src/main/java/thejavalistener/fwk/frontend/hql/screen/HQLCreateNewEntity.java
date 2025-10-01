@@ -30,6 +30,7 @@ import thejavalistener.fwk.awt.MyComponent;
 import thejavalistener.fwk.awt.form.MyForm;
 import thejavalistener.fwk.awt.link.MyLink;
 import thejavalistener.fwk.awt.list.MyComboBox;
+import thejavalistener.fwk.awt.list.MyComboBoxAdapter;
 import thejavalistener.fwk.awt.textarea.MyTextField;
 import thejavalistener.fwk.frontend.MyAbstractScreen;
 import thejavalistener.fwk.frontend.messages.MyScreenMessageEvent;
@@ -79,7 +80,8 @@ public class HQLCreateNewEntity extends MyAbstractScreen implements MyScreenMess
 		// entities
 		cbEntities = new MyComboBox<>();
 		cbEntities.c().setPreferredSize(new Dimension(300,cbEntities.c().getPreferredSize().height));
-		cbEntities.setItemListener(new EscuchaEntities());
+
+		cbEntities.setComboBoxListener(new EscuchaEntities());
 		cbEntities.setTToString(clazz->clazz.getSimpleName());
 
 		Class<?> entityClass = (Class<?>)removeValueFrom(HQLScreen.class,"entityClass");
@@ -102,13 +104,12 @@ public class HQLCreateNewEntity extends MyAbstractScreen implements MyScreenMess
 		cbEntities.forceItemEvent();		
 	}
 	
-	class EscuchaEntities implements ItemListener
+	class EscuchaEntities extends MyComboBoxAdapter
 	{
 		@Override
 		public void itemStateChanged(ItemEvent e)
 		{
 			_generarForm(cbEntities.getSelectedItem());
-//			getMyDialog().setTitle("Crear objeto: "+cbEntities.getSelectedItem().getName());
 		}
 	}
 	
