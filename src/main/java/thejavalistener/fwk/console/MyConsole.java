@@ -1,5 +1,7 @@
 package thejavalistener.fwk.console;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
@@ -10,14 +12,19 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import thejavalistener.fwk.awt.MyAwt;
 import thejavalistener.fwk.util.MyCollection;
+import thejavalistener.fwk.util.MyThread;
 import thejavalistener.fwk.util.string.MyString;
 
 //@Component
 public class MyConsole extends MyConsoleBase
 {	
+	private static JFrame frame = null;
+	
 	// listeners
 	private EscuchaRead escuchaRead = null;
 	private EscuchaPressAnyKey escuchaPressAnyKey = null;
@@ -27,28 +34,67 @@ public class MyConsole extends MyConsoleBase
 	// bloqueo
     private SecondaryLoop secondaryLoop = null; 
     
-//	public static void open(String title, int width, int height)
-//	{
-//	    JFrame frame = new JFrame(title != null ? title : "Console");
-//	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//	    frame.setSize(width > 0 ? width : 600, height > 0 ? height : 400);
-//	    frame.setContentPane(io.c()); // usa el contentPane de la instancia singleton
-//	    frame.setVisible(true);
-//	    io.mainWindow = frame; // opcional, si querés guardar referencia
-//	}
- 
-    private boolean _suggestCloseableMode()
-    {
-		for(StackTraceElement elm:Thread.currentThread().getStackTrace())
-		{
-			if(elm.getClassName().startsWith("javax.swing"))
-			{
-				return true;
-			}
-		}
+	public static MyConsole openWindow(String title)
+	{
+	    // Obtener dimensiones de pantalla
+	    Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+
+	    // Definir proporciones (ejemplo: 30% ancho, 30% alto)
+	    int width = (int) (screen.width * .7);
+	    int height = (int) (screen.height * .7);
+
+	    return openWindow(title, width, height);
+	}
+	
+	public static MyConsole openWindow(String title, int width, int height)
+	{
+		MyAwt.setWindowsLookAndFeel();
 		
-		return false;
-    }
+		MyConsole c = new MyConsole();
+		
+	    frame = new JFrame(title != null ? title : "Console");
+	    frame.add(c.c(),BorderLayout.CENTER); // usa el contentPane de la instancia singleton
+	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    frame.setSize(width > 0 ? width : 600, height > 0 ? height : 400);
+	    frame.setVisible(true);
+	    return c;
+	}
+	
+	public void closeAndExit()
+	{
+		if( frame!=null )
+		{
+			frame.setVisible(false);
+			frame.dispose();
+		}
+	}
+	
+	public void closeAndExit(String mssg,int secs)
+	{
+		print(mssg);
+		for(int i=secs;i>0;i--)
+		{
+			print(i+"s.");
+			MyThread.sleep(1000);
+			skipBkp(3);
+		}
+
+		closeAndExit();
+	}
+
+ 
+//    private boolean _suggestCloseableMode()
+//    {
+//		for(StackTraceElement elm:Thread.currentThread().getStackTrace())
+//		{
+//			if(elm.getClassName().startsWith("javax.swing"))
+//			{
+//				return true;
+//			}
+//		}
+//		
+//		return false;
+//    }
 
 	public MyConsole()
 	{			

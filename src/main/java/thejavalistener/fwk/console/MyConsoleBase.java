@@ -2,17 +2,10 @@ package thejavalistener.fwk.console;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Font;
-import java.awt.Window;
-//import java.awt.Window;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +16,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.text.StyledDocument;
@@ -59,8 +51,6 @@ public abstract class MyConsoleBase
 	protected abstract int _menu(int menuRange[][]);
 
 	protected int inputPosition;
-
-	protected boolean initialized=false;
 
 	protected MyTextPane textPane;
 	protected JScrollPane scrollPane;
@@ -136,12 +126,14 @@ public abstract class MyConsoleBase
 		customStyles.put("defaultStyle",style.defaultStyle);
 
 		contentPane = new MyBorderLayout();
-
+		contentPane.setBorder(null);
+		
 		textPane=new MyTextPane(false,true);
-//		textPane.addKeyListener(new EscuchaCTRLCyESC());
 		scrollPane=new JScrollPane(textPane.c());
+		scrollPane.setBorder(null);
 		contentPane.add(scrollPane,BorderLayout.CENTER);
 						
+//		textPane.addKeyListener(new EscuchaCTRLCyESC());
 //		if(contentPane instanceof Window || contentPane instanceof JFrame)
 //		{
 //			contentPane.add(scrollPane,BorderLayout.CENTER);
@@ -163,19 +155,15 @@ public abstract class MyConsoleBase
 
 	protected void init()
 	{
-		if(!initialized)
-		{
-			initialized=true;
-			MyConsoleStyle style=getStyle();
-			Font font=new Font(style.fontFamily,style.fontStyle,style.fontSize);
-			textPane.setFont(font);
-			textPane.setBackground(style.background);
-			textPane.setForeground(style.foreground);
-			textPane.setCaretColor(style.caretColor);
-			textPane.setEditable(false);
-			cs(getDefaultStyle());
-			scrollPane.setBorder(null);			
-		}
+		MyConsoleStyle style=getStyle();
+		Font font=new Font(style.fontFamily,style.fontStyle,style.fontSize);
+		textPane.setFont(font);
+		textPane.setBackground(style.background);
+		textPane.setForeground(style.foreground);
+		textPane.setCaretColor(style.caretColor);
+		textPane.setEditable(false);
+		cs(getDefaultStyle());
+		scrollPane.setBorder(null);			
 	}
 
 	public JPanel c()
