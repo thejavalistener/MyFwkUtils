@@ -447,9 +447,18 @@ public class MyTextPane
 	/** Remueve los últimos n estilos apilados */
 	public MyTextPane x(int n)
 	{
-		for(int i=0; i<n; i++)
-			textPane.setCharacterAttributes(estilos.pop(),true);
-		return this;
+//		for(int i=0; i<n; i++)
+//			textPane.setCharacterAttributes(estilos.pop(),true);
+//		return this;
+		
+		// nunca vaciar del todo: dejar al menos el estilo base
+	    int pops = Math.min(n, Math.max(0, estilos.size() - 1));
+	    for (int i = 0; i < pops; i++) {
+	        estilos.pop();
+	    }
+	    // aplicar el estilo que queda en la cima (estado previo)
+	    textPane.setCharacterAttributes(estilos.peek(), true);
+	    return this;		
 	}
 	
 	

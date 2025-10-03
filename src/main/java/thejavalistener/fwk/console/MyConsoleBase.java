@@ -2,7 +2,9 @@ package thejavalistener.fwk.console;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -16,14 +18,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.text.StyledDocument;
 
+import thejavalistener.fwk.awt.MyAwt;
 import thejavalistener.fwk.awt.panel.MyBorderLayout;
 import thejavalistener.fwk.awt.textarea.MyTextPane;
 import thejavalistener.fwk.util.MyCollection;
 import thejavalistener.fwk.util.MyColor;
+import thejavalistener.fwk.util.MyThread;
 import thejavalistener.fwk.util.TriFunction;
 import thejavalistener.fwk.util.string.MyString;
 
@@ -42,6 +47,68 @@ public abstract class MyConsoleBase
 	public static final TriFunction<Character,Integer,String,Character> AÑZ=(c, kc, s) -> c>='A'&&c<='Z'||c=='Ñ'||_validKeyCode(kc)?c:null;
 	public static final TriFunction<Character,Integer,String,Character> AZ=(c, kc, s) -> c>='A'&&c<='Z'||_validKeyCode(kc)?c:null;
 
+	private static JFrame frame = null;
+	
+	public static MyConsole openWindow(String title)
+	{
+	    // Obtener dimensiones de pantalla
+	    Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+
+	    // Definir proporciones (ejemplo: 30% ancho, 30% alto)
+	    int width = (int) (screen.width * .7);
+	    int height = (int) (screen.height * .7);
+
+	    return openWindow(title, width, height);
+	}
+	
+	public static MyConsole openWindow(String title, int width, int height)
+	{
+		MyAwt.setWindowsLookAndFeel();
+		
+		MyConsole c = new MyConsole();
+		
+	    frame = new JFrame(title != null ? title : "Console");
+	    frame.add(c.c(),BorderLayout.CENTER); // usa el contentPane de la instancia singleton
+	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    frame.setSize(width > 0 ? width : 600, height > 0 ? height : 400);
+	    
+	    MyAwt.center(frame,null);
+	    frame.setVisible(true);
+	    return c;
+	}
+	
+	
+	public MyConsoleBase countdownln(int secs)
+	{
+		countdown(secs);
+		println();
+		return this;
+	}
+
+	
+	public MyConsoleBase countdown(int secs)
+	{
+		for(int i=secs;i>0;i--)
+		{
+			print(i+"s.");
+			MyThread.sleep(1000);
+			skipBkp(3);
+		}
+		
+		return this;
+	}
+	
+	public void closeAndExit(int secs)
+	{
+		if( frame!=null )
+		{
+			countdown(secs);
+			frame.setVisible(false);
+			frame.dispose();
+		}
+	}
+
+	
 	protected abstract String _readString(InputConfigurator isconfig);
 
 	protected abstract int _pressAnyKey(Integer k, Runnable r);
@@ -207,34 +274,65 @@ public abstract class MyConsoleBase
 	}
 
 
+//	public MyConsoleBase print(Object o)
+//	{
+//		init();
+//		open();
+//
+//		String s=o==null?"null":o.toString();
+//		String[][] toPrint=_extractFormattedText(s);
+//
+//		for(int i=0; i<toPrint.length; i++)
+//		{
+//			String txt=toPrint[i][0];
+//			String style=toPrint[i][1];
+//
+//			if(!style.isEmpty())
+//			{
+//				cs(style);
+//				_print(txt);
+//				x();
+//			}
+//			else
+//			{
+//				_print(txt);
+//			}
+//		}
+//
+//		return this;
+//	}
+
 	public MyConsoleBase print(Object o)
 	{
-		init();
-		open();
+	    init();
+	    open();
 
-		String s=o==null?"null":o.toString();
-		String[][] toPrint=_extractFormattedText(s);
+	    String s = o == null ? "null" : o.toString();
+	    String[][] toPrint = _extractFormattedText(s);
 
-		for(int i=0; i<toPrint.length; i++)
-		{
-			String txt=toPrint[i][0];
-			String style=toPrint[i][1];
+	    for (int i = 0; i < toPrint.length; i++)
+	    {
+	        String txt   = toPrint[i][0];
+	        String style = toPrint[i][1];
 
-			if(!style.isEmpty())
-			{
-				cs(style);
-				_print(txt);
-				x();
-			}
-			else
-			{
-				_print(txt);
-			}
-		}
+	        if (!style.isEmpty())
+	        {
+	            // cuántos estilos se aplicaron (ej: "[fg(orange)][b]" => 2)
+	            int toClose = thejavalistener.fwk.util.string.MyString.extract(style, "[", "]").length;
 
-		return this;
+	            cs(style);        // push de todos los estilos
+	            _print(txt);      // imprime con esos estilos
+	            x(toClose);       // ⬅️ POP de todos los estilos aplicados
+	        }
+	        else
+	        {
+	            _print(txt);
+	        }
+	    }
+	    return this;
 	}
-
+	
+	
 	private MyConsoleBase _print(String s)
 	{
 		String[] reemAña=_reemplazarOAñadir(textPane.getText(),textPane.getCaretPosition(),s);
