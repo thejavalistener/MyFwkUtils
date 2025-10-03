@@ -48,6 +48,7 @@ public abstract class MyConsoleBase
 	public static final TriFunction<Character,Integer,String,Character> AZ=(c, kc, s) -> c>='A'&&c<='Z'||_validKeyCode(kc)?c:null;
 
 	private static JFrame frame = null;
+	private static MyConsole singleton = null;
 	
 	public static MyConsole openWindow(String title)
 	{
@@ -65,7 +66,7 @@ public abstract class MyConsoleBase
 	{
 		MyAwt.setWindowsLookAndFeel();
 		
-		MyConsole c = new MyConsole();
+		MyConsole c = singleton();
 		
 	    frame = new JFrame(title != null ? title : "Console");
 	    frame.add(c.c(),BorderLayout.CENTER); // usa el contentPane de la instancia singleton
@@ -77,6 +78,15 @@ public abstract class MyConsoleBase
 	    return c;
 	}
 	
+	public static MyConsole singleton()
+	{
+		if( singleton==null )
+		{
+			singleton = new MyConsole();
+		}
+		
+		return singleton;
+	}
 	
 	public MyConsoleBase countdownln(int secs)
 	{
