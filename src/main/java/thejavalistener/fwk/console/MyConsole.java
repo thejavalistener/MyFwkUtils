@@ -459,8 +459,9 @@ public class MyConsole extends MyConsoleBase
 
 		public void setMenuRange(int menuRange[][])
 		{
-			textPane.setSelectedText(menuRange[0][0],menuRange[0][1]);
 			this.menuRange=menuRange;
+			curr = 0;
+			textPane.setSelectedText(menuRange[0][0],menuRange[0][1]);
 		}
 
 		@Override
