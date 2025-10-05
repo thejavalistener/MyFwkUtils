@@ -9,7 +9,7 @@ import thejavalistener.fwk.util.MyThread;
 
 public class ProgressMeter extends Progress
 {
-	public ProgressMeter(MyConsoleBase c,int top)
+	public ProgressMeter(MyConsoleBase c,long top)
 	{
 		super(c);
 		super.top = top;

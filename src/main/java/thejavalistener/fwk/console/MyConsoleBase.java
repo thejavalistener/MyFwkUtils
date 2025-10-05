@@ -760,14 +760,20 @@ public abstract class MyConsoleBase
 //		}
 //	}
 
-	public Progress progressBar(int size, int top)
+	public Progress progressBar(int size, long top)
 	{
-		return new ProgressBar(this,size,top);
+		Progress p = new ProgressBar(this,size,top);
+		p.begin();
+		return p;
+//		return new ProgressBar(this,size,top);
 	}
 
 	public Progress progressMeter(int top)
 	{
-		return new ProgressMeter(this,top);
+		Progress p = new ProgressMeter(this,top);
+		p.begin();
+		return p;
+//		return new ProgressMeter(this,top);
 	}
 
 	public void addListener(MyConsoleListener lst)
@@ -1032,7 +1038,7 @@ public abstract class MyConsoleBase
 				singleton.closeAndExit(0);
 			}
 		}
-	}
+	}    
 	
 	private static boolean _confirmaSalir()
 	{

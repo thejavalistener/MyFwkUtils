@@ -3,11 +3,11 @@ package thejavalistener.fwk.console;
 public class ProgressBar extends Progress
 {
 	private int size;
-	private int top;
+	private long top;
 	
 	private int lastCorch;
 
-	public ProgressBar(MyConsoleBase c,int size,int top)
+	public ProgressBar(MyConsoleBase c,int size,long top)
 	{
 		super(c);
 		this.size = size;
@@ -63,10 +63,3 @@ public class ProgressBar extends Progress
 		increase("");
 	}
 }
-
-
-
-
-
-
-

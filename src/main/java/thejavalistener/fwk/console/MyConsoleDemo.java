@@ -35,6 +35,11 @@ public class MyConsoleDemo
 		String pwd = c.print("Ingrese un password: ").readlnPassword();
 		c.println("El password es: "+pwd);
 		
+		
+		// NOTA - El método execute sólo es necesario si la consola está dentro 
+		//        de una GUI si se trata de una app netamente de consola 
+		//        puede obviarse e ir directo al increas.
+
 		// un proceso usando progressBar....
 		c.print("Presione la tecla [p]... ").pressAnyKey('P');
 		int loops = 100;

@@ -15,7 +15,7 @@ public abstract class Progress
 	
 	protected int ant;
 	protected int curr;
-	protected int top;
+	protected long top;
 	
 	protected long initProgressTime;
 	protected long finishProgressTime;
@@ -37,7 +37,7 @@ public abstract class Progress
         EventQueue eventQueue = Toolkit.getDefaultToolkit().getSystemEventQueue();
         SecondaryLoop loop = eventQueue.createSecondaryLoop();
         
-        begin();
+//        begin();
         
 		MyCollection.invoke(console.getListeners(),t->t.waitingForUserInput(true));
 
