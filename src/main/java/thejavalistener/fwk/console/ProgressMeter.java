@@ -17,17 +17,20 @@ public class ProgressMeter extends Progress
 	}
 	
 	@Override
-	protected void begin()
+	protected Progress begin()
 	{
 		initProgressTime=System.currentTimeMillis();
 		curr=0;
 		console.print("00%");
 		console.skipBkp(3);
-		
+		return this;
 	}
 
+	@Override
 	public void increase(String mssg)
 	{
+		_verifyThread();
+
 		curr++;
 		int porc=(int)Math.floor(((double)curr/top)*100);
 
@@ -46,8 +49,11 @@ public class ProgressMeter extends Progress
 		}		
 	}
 
+	@Override
 	public void increase()
 	{
+		_verifyThread();
+		
 		curr++;
 		int porc=(int)Math.floor(((double)curr/top)*100);
 

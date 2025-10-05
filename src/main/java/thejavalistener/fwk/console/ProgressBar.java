@@ -14,7 +14,7 @@ public class ProgressBar extends Progress
 		this.top = top;
 	}
 	
-	protected void begin()
+	protected Progress begin()
 	{
 		curr=0;
 		console.print("[");
@@ -30,10 +30,14 @@ public class ProgressBar extends Progress
 		console.cs(console.getStyle().progressStyle);
 
 		initProgressTime=System.currentTimeMillis();
+		
+		return this;
 	}
 
 	public void increase(String mssg)
 	{
+		_verifyThread();
+		
 		curr++;
 		double porc=((double)curr/top)*size;
 
@@ -55,7 +59,7 @@ public class ProgressBar extends Progress
 			ant=0;
 			console.skipFwd();
 			console.X();
-		}		
+		}
 	}
 	
 	public void increase()

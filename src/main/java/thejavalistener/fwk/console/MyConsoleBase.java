@@ -309,36 +309,7 @@ public abstract class MyConsoleBase
 			return;
 		}
 	}
-
-
-//	public MyConsoleBase print(Object o)
-//	{
-//		init();
-//		open();
-//
-//		String s=o==null?"null":o.toString();
-//		String[][] toPrint=_extractFormattedText(s);
-//
-//		for(int i=0; i<toPrint.length; i++)
-//		{
-//			String txt=toPrint[i][0];
-//			String style=toPrint[i][1];
-//
-//			if(!style.isEmpty())
-//			{
-//				cs(style);
-//				_print(txt);
-//				x();
-//			}
-//			else
-//			{
-//				_print(txt);
-//			}
-//		}
-//
-//		return this;
-//	}
-
+	
 	public MyConsoleBase print(Object o)
 	{
 	    init();
@@ -752,28 +723,14 @@ public abstract class MyConsoleBase
 		}
 	}
 
-//	public void close()
-//	{
-//		if(contentPane.isVisible())
-//		{
-//			contentPane.setVisible(false);
-//		}
-//	}
-
 	public Progress progressBar(int size, long top)
 	{
-		Progress p = new ProgressBar(this,size,top);
-		p.begin();
-		return p;
-//		return new ProgressBar(this,size,top);
+		return new ProgressBar(this,size,top);
 	}
 
 	public Progress progressMeter(int top)
 	{
-		Progress p = new ProgressMeter(this,top);
-		p.begin();
-		return p;
-//		return new ProgressMeter(this,top);
+		return new ProgressMeter(this,top);
 	}
 
 	public void addListener(MyConsoleListener lst)
