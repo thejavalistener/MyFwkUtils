@@ -29,13 +29,21 @@ public class DaoSupport
 	{
 		List<T> lst = queryMultipleRows(hql,params);
 		int n = lst.size();
+		
 		if( n>1 )
 		{
 			String mssg = "Se esperaba 1 o ninguna fila, pero se encontraron: "+n;
 			throw new RuntimeException(mssg);
 		}
 		
-		return n==1?lst.get(0):null;
+		return n==1?lst.get(0):null;		
+	}
+	
+	
+	public <T> T querySingleRowOrFirst(String hql,Object ...params)
+	{
+		List<T> lst = queryMultipleRows(hql,params);
+		return lst.size()>0?lst.get(0):null;		
 	}
 	
 	/** Considera que la lista de parametros esta indexada (WHERE p1=? AND p2=?...) */
