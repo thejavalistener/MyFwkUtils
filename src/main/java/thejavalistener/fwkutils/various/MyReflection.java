@@ -14,63 +14,6 @@ import thejavalistener.fwkutils.string.MyString;
 
 public class MyReflection
 {
-//	public static Object invokeGetter(Object o, String att)
-//	{
-//		try
-//		{
-//			String mtdName="get"+MyString.switchCase(att,0);
-//			Method mtd=o.getClass().getMethod(mtdName);
-//			return mtd.invoke(o);
-//		}
-//		catch(Exception e)
-//		{
-//			e.printStackTrace();
-//			throw new RuntimeException(e);
-//		}
-//	}
-
-//	public static void invokeSetter(Object o, String att, Object value)
-//	{
-//		try
-//		{
-//			Class<?> oClass=o.getClass();
-//			String mtdName="set"+MyString.switchCase(att,0);
-//
-//			Method mtd;
-//
-//			if(value!=null)
-//			{
-//				mtd=oClass.getMethod(mtdName,value.getClass());
-//			}
-//			else
-//			{
-//				mtd=oClass.getMethod(mtdName,oClass.getDeclaredField(att).getType());
-//			}
-//
-//			mtd.invoke(o,value);
-//		}
-//		catch(Exception e)
-//		{
-//			e.printStackTrace();
-//			throw new RuntimeException(e);
-//		}
-//	}
-
-
-//	public static boolean equalsById(Object a, Object b)
-//	{
-//		if(a==null&&b==null) return true;
-//		if(a==null&&b!=null||a!=null&&b==null) return false;
-//
-//		Field aId=getDeclaredField(a.getClass(),Id.class);
-//		Field bId=getDeclaredField(b.getClass(),Id.class);
-//
-//		Object aV=invokeGetter(a,aId.getName());
-//		Object bV=invokeGetter(b,bId.getName());
-//
-//		return aV.equals(bV);
-//	}
-	
 	static class runtime
 	{
 		public static void unsoportedMethod()
