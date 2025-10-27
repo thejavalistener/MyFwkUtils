@@ -1,13 +1,15 @@
 package thejavalistener.fwkutils.various;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import thejavalistener.fwkutils.reflect.MyClass;
 import thejavalistener.fwkutils.string.MyString;
 
 public class MyReflection
@@ -88,18 +90,108 @@ public class MyReflection
 
 	public static class clasz
 	{
+		public static Method getMethod(Class<?> clazz,String mtdName,List<Class<?>> argTypes)
+		{
+			Class<?>[] arrArgTypes = MyCollection.toArray(argTypes,Class.class);
+			return getMethod(clazz,mtdName,arrArgTypes);
+		}
+		
+		public static Method getMethod(Class<?> clazz,String mtdName,Class<?> argTypes[])
+		{
+			try
+			{
+				Method mtd = null;
+				Class<?> aux = clazz;
+				while( !aux.equals(Object.class) && mtd==null )
+				{
+					// todos los metodos de la clase
+					Method mtds[] = aux.getDeclaredMethods();
+
+					// filtro los metodos que coinciden con el nombre mtdName
+					List<Method> mtds1 = MyCollection.extract(mtds,(t)->t,(t)->t.getName().equals(mtdName));
+
+					if( mtds1.size()>0 )
+					{
+						// filtro por cantidad de parametros
+						List<Method> mtds2 = MyCollection.extract(mtds1,(t)->t,(t)->t.getParameterCount()==argTypes.length);
+						if( mtds2.size()>0 )
+						{
+							// filtro por tipo de parametros
+							List<Method> mtds3 = MyCollection.extract(mtds2,(t)->t,(t)->_concuerdanParametros(t.getParameterTypes(),argTypes));
+							if( mtds3.size()>0 )
+							{
+								return mtds3.get(0);
+							}
+						}
+					}
+					
+					aux = aux.getSuperclass();
+				}
+				
+				return mtd;		
+				
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+				throw new RuntimeException();
+			}		
+		}
+		
+		private static boolean _concuerdanParametros(Class<?> paramTypes[],Class<?> argTypes[])
+		{
+			for(int i=0;i<paramTypes.length;i++)
+			{
+				Class<?> p = getWrapperFor(paramTypes[i]);
+				Class<?> a = getWrapperFor(argTypes[i]);
+				if( !p.equals(a) )
+				{
+					return false;
+				}
+			}
+			
+			return true;
+		}
+
+		public static Class<?> getWrapperFor(Class<?> primitiveClass)
+		{
+			switch( primitiveClass.getName() )
+			{
+				case "byte":
+					return Byte.class;
+				case "char":
+					return Character.class;
+				case "short":
+					return Short.class;
+				case "int":
+					return Integer.class;
+				case "long":
+					return Long.class;
+				case "float":
+					return Float.class;
+				case "double":
+					return Double.class;
+				case "boolean":
+					return Boolean.class;
+				default:
+					return primitiveClass;
+			}		
+		}
+		
+		
+		
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		public static boolean isAnnotedWith(Class<?> c, Class annClass)
 		{
 			return c.getAnnotation(annClass)!=null;
 		}
 		
-		public static List<String> getAttributes(Class<?> clazz)
+		public static List<String> getAttributes(Class<?> c)
 		{
 			ArrayList<String> getters=new ArrayList<>();
 			ArrayList<String> setters=new ArrayList<>();
 
-			Method mtds[]=clazz.getDeclaredMethods();
+			Method mtds[]=c.getDeclaredMethods();
 			for(int i=0; i<mtds.length; i++)
 			{
 				String mtdName=mtds[i].getName();
@@ -130,9 +222,9 @@ public class MyReflection
 		}
 		
 		/** Retorna los declared fields que cumplan con la condición establecida por $func */
-		public static Field[] getDeclaredFields(Class<?> clazz, Function<Field,Boolean> func)
+		public static Field[] getDeclaredFields(Class<?> c, Function<Field,Boolean> func)
 		{
-			Field[] fields=clazz.getDeclaredFields();
+			Field[] fields=c.getDeclaredFields();
 			return Stream.of(fields).filter(f -> func.apply(f)).toArray(Field[]::new);
 		}
 
@@ -290,7 +382,7 @@ public class MyReflection
 			try
 			{
 				List<Class<?>> argTypes = MyCollection.extract(args,(t)->t.getClass());
-				Method mtd = MyClass.getMethod(target.getClass(),mtdName,argTypes);
+				Method mtd = clasz.getMethod(target.getClass(),mtdName,argTypes);
 				if( mtd!=null )
 				{
 					return mtd.invoke(target,args);
@@ -329,6 +421,81 @@ public class MyReflection
 		{
 			return "get"+MyString.switchCase(f.getName(),0);
 		}		
+	}
+	
+	static class pkg
+	{
+		public static List<Class<?>> getClasses(String packageName,boolean recursive) 
+		{
+			return getClasses(packageName,recursive,(c)->true);
+		}
+		
+		public static List<Class<?>> getClasses(String packageName,boolean recursive,Function<Class<?>,Boolean> filter) 
+		{
+			try
+			{
+				ClassLoader classLoader=Thread.currentThread().getContextClassLoader();
+				assert classLoader!=null;
+				
+				String path=packageName.replace('.','/');
+				Enumeration<URL> resources = classLoader.getResources(path);
+				List<File> dirs = new ArrayList<File>();
+				while(resources.hasMoreElements())
+				{
+					URL resource=resources.nextElement();
+					dirs.add(new File(resource.getFile()));
+				}
+				
+				List<Class<?>> ret = new ArrayList<>();
+				for(File directory:dirs)
+				{
+					ret.addAll(_findClasses(directory,packageName,recursive));
+				}
+				
+				ret = MyCollection.extract(ret,(t)->t,filter);
+				return ret;
+				
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		}
+
+		private static List<Class<?>> _findClasses(File dir, String auxPkgName,boolean recursive) 
+		{
+			try
+			{
+				List<Class<?>> ret = new ArrayList<>();
+				if(!dir.exists())
+				{
+					return ret;
+				}
+				
+				File[] files=dir.listFiles();
+				for(File file:files)
+				{
+					if(file.isDirectory() && recursive)
+					{
+						assert !file.getName().contains(".");
+						ret.addAll(_findClasses(file,auxPkgName+"."+file.getName(),recursive));
+					}
+					else if(file.getName().endsWith(".class"))
+					{
+						Class<?> clazz = Class.forName(auxPkgName+'.'+file.getName().substring(0,file.getName().length()-6));
+						ret.add(clazz);
+					}
+				}
+				return ret;			
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		}
+		
 	}
 
 }
