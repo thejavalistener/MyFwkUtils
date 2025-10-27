@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
 
-import thejavalistener.fwk.util.MyThread;
+import thejavalistener.fwkutils.various.MyThread;
 
 public class MyImageBase
 {

@@ -10,21 +10,19 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import thejavalistener.fwk.awt.MyAwt;
-import thejavalistener.fwk.awt.link.MyLink;
-import thejavalistener.fwk.awt.panel.GridLayout2;
-import thejavalistener.fwk.awt.panel.MyCenterLayout;
-import thejavalistener.fwk.awt.textarea.MyTextField;
+import thejavalistener.fwkutils.awt.GridLayout2;
+import thejavalistener.fwkutils.awt.MyAwt;
 
 public class MyTestUI implements MyTestUIInterface
 {
 	private JFrame frame;
 	private List<ButtonUI> buttons;
-	private Map<String,MyTextField> textfields;
+	private Map<String,JTextField> textfields;
 	private JPanel pSouth;
 	private JPanel pNorth;
 
@@ -79,7 +77,7 @@ public class MyTestUI implements MyTestUIInterface
 	
 	public JTextField getTextField(String tfname)
 	{
-		return (JTextField)textfields.get(tfname).c();
+		return (JTextField)textfields.get(tfname);
 	}
 
 	public MyTestUI run()
@@ -106,9 +104,12 @@ public class MyTestUI implements MyTestUIInterface
 
 	public MyTestUI addTextField(String tfName, int length)
 	{
-		MyTextField tf=new MyTextField(length);
-		pNorth.add(new MyCenterLayout(new MyLink(tfName).c()));
-		pNorth.add(tf.c());
+		JTextField tf=new JTextField(length);
+		
+		JPanel p = new JPanel(new BorderLayout());
+		p.add(new JLabel(tfName));
+		pNorth.add(p);
+		pNorth.add(tf);
 		textfields.put(tfName,tf);
 		return this;
 	}
