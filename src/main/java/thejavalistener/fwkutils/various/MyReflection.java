@@ -234,6 +234,13 @@ public class MyReflection
 				throw new RuntimeException(e);
 			}
 		}
+		
+		public static List<Field> getFields(Class<?> clazz,Function<Field,Boolean> filter)
+		{
+			Field arr[] = clazz.getDeclaredFields();
+			return MyCollection.extract(arr,(f)->f,filter);
+		}
+
 	}
 	
 	public static class object

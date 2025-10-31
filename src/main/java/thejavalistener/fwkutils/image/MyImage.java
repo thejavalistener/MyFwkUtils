@@ -1,4 +1,4 @@
-package thejavalistener.fwk.image;
+package thejavalistener.fwkutils.image;
 
 import java.io.File;
 import java.util.function.Consumer;

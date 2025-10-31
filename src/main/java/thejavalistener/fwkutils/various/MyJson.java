@@ -18,21 +18,52 @@ public class MyJson
 		
 		return gson.toJson(jsonObject);
 	}
-	
+		
+	@SuppressWarnings("unchecked")
 	public static <T> T fromJson(String jsonString)
 	{
-        Gson gson = new GsonBuilder().create();
-		
-        JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
-        String className = jsonObject.get("type").getAsString();
-        JsonElement data = jsonObject.get("data");
+	    if (jsonString == null) return null;
 
-        
-        
-        // Deserializa el objeto usando la información del tipo
-        Class<?> clazz = MyReflection.clasz.forName(className);
-        T deserializedObject = (T)gson.fromJson(data, clazz);
-		
-		return deserializedObject;
-	}	
+	    Gson gson = new GsonBuilder().create();
+	    JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
+
+	    String className = jsonObject.get("type").getAsString();
+	    JsonElement data = jsonObject.get("data");
+
+	    try
+	    {
+	        Class<?> clazz = Class.forName(className);
+
+	     // --- Caso especial: Class ---
+	        if (clazz.equals(Class.class)) {
+	            String innerName = data.getAsString();
+	            return (T) Class.forName(innerName);
+	        }
+
+	        
+	        // 🔹 Normalizar tipos problemáticos (List.of, Map.of, etc.)
+	        if (clazz.getName().startsWith("java.util.ImmutableCollections$List"))
+	        {
+	            return (T) gson.fromJson(data, java.util.ArrayList.class);
+	        }
+	        else if (clazz.getName().startsWith("java.util.ImmutableCollections$Map"))
+	        {
+	            return (T) gson.fromJson(data, java.util.LinkedHashMap.class);
+	        }
+	        else if (clazz.getName().startsWith("java.util.ImmutableCollections$Set"))
+	        {
+	            return (T) gson.fromJson(data, java.util.LinkedHashSet.class);
+	        }
+	        else
+	        {
+	            // 🔹 Tipo normal
+	            return (T) gson.fromJson(data, clazz);
+	        }
+	    }
+	    catch (ClassNotFoundException e)
+	    {
+	        throw new RuntimeException("Clase no encontrada: " + className, e);
+	    }
+	}
+	
 }

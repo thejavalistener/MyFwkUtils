@@ -1,4 +1,4 @@
-package thejavalistener.fwk.awt.testui;
+package thejavalistener.fwkutils.awt.testui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

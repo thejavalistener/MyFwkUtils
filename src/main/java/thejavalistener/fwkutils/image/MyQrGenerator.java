@@ -1,4 +1,4 @@
-package thejavalistener.fwk.image;
+package thejavalistener.fwkutils.image;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

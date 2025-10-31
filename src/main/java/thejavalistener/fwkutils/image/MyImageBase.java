@@ -1,6 +1,6 @@
-package thejavalistener.fwk.image;
+package thejavalistener.fwkutils.image;
 
-import static thejavalistener.fwk.image.MyImageBase._ensureParent;
+import static thejavalistener.fwkutils.image.MyImageBase._ensureParent;
 
 import java.awt.Graphics2D;
 import java.awt.Image;

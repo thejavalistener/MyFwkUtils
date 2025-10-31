@@ -1,4 +1,4 @@
-package thejavalistener.fwk.awt.testui;
+package thejavalistener.fwkutils.awt.testui;
 
 public interface MyTestUIInterface
 {

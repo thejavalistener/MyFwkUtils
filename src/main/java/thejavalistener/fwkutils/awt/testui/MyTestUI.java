@@ -1,4 +1,4 @@
-package thejavalistener.fwk.awt.testui;
+package thejavalistener.fwkutils.awt.testui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
