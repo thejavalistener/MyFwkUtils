@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,8 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import thejavalistener.fwkutils.awt.GridLayout2;
-import thejavalistener.fwkutils.awt.MyAwt;
+import thejavalistener.fwkutils.awt.variuos.GridLayout2;
 
 public class MyTestUI implements MyTestUIInterface
 {
@@ -139,11 +139,5 @@ public class MyTestUI implements MyTestUIInterface
 	public void show(String mssg)
 	{
 		JOptionPane.showMessageDialog(frame,mssg);
-	}
-
-	public MyTestUI maximize()
-	{
-		MyAwt.maximize(frame);
-		return this;
-	}
+	}	
 }
