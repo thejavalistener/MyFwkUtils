@@ -28,3 +28,17 @@ dependencies {
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
+
+// --- Publicación para JitPack ---
+apply plugin: 'maven-publish'
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            groupId = 'com.github.thejavalistener'
+            artifactId = 'MyFwkUtils'
+            version = '1.0.0'
+        }
+    }
+}
