@@ -1,5 +1,6 @@
 package thejavalistener.fwkutils.various;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.sql.Date;
@@ -23,7 +24,25 @@ public class MyFileProperties
 
 	public MyFileProperties(String filename)
 	{
-		_load(filename);
+		String newFilename = _procesarFilename(filename);
+		_load(newFilename);
+	}
+	
+	private String _procesarFilename(String filename)
+	{
+		String sep = Character.toString(File.separatorChar);
+		
+		// si es sólo un nombre de archivo (sin path) => por defecto al home del usuario
+		if( !filename.contains(sep) )
+		{
+	        return System.getProperty("user.home") + File.separator + filename;			
+		}
+		else
+		{
+			return filename;
+		}
+		
+
 	}
 
 	private void _load(String filename)
