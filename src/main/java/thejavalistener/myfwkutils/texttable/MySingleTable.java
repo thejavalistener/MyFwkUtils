@@ -3,8 +3,8 @@ package thejavalistener.myfwkutils.texttable;
 import java.sql.ResultSet;
 import java.util.List;
 
+import thejava.listener.fwkutils.log.MyLog;
 import thejavalistener.fwkutils.string.MyString;
-import thejavalistener.fwkutils.various.MyLog;
 import thejavalistener.fwkutils.various.MyNumber;
 
 public class MySingleTable extends MyAbstractTextTable
@@ -50,7 +50,6 @@ public class MySingleTable extends MyAbstractTextTable
 	public MySingleTable loadData(DataLoader dl)
 	{
 		// cargo los datos
-		MyLog.println("OJO ACA...");
 		if( columns.size()==0)
 			headers(dl.headers());
 		

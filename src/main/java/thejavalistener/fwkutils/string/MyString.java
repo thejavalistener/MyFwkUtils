@@ -820,7 +820,7 @@ public class MyString
 		return sb.toString();
 	}
 
-	private static String firstChars(String s, int n)
+	public static String firstChars(String s, int n)
 	{
 		int len=Math.min(s.length(),n);
 		return s.substring(0,len);
@@ -1313,6 +1313,24 @@ public class MyString
 	public static String join(String[] array, String sep) 
 	{
 		return join(List.of(array),sep);
+	}
+
+	public static String left(String s, int length)
+	{
+		String x= s.length()<length?s:s.substring(0,length);
+		return rpad(x,' ',length);
+	}
+
+	public static String right(String s,int length)
+	{
+		String x= s.length()<length?s:s.substring(0,length);
+		return lpad(x,' ',length);
+	}
+	
+	public static int digits(long n)
+	{
+		long x = Math.abs(n);
+		return Long.toString(x).length();
 	}
 	
 }

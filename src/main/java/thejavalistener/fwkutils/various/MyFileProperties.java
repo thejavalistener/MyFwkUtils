@@ -326,4 +326,9 @@ public class MyFileProperties
 	{
 	    return new ArrayList<>(properties.stringPropertyNames());
 	}
+
+	public String getPropertiesFilename()
+	{
+		return filename;
+	}
 }
