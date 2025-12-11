@@ -25,6 +25,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import thejavalistener.fwkutils.various.MyCollection;
 import thejavalistener.fwkutils.various.MyReflection;
 
 public class MyTable<T>
@@ -122,7 +123,7 @@ public class MyTable<T>
 		
 	}
 
-	public MyTable<T> headers(Object... headers)
+	public MyTable<T> headers(Object[] headers)
 	{
 		if( !hayHeaders )
 		{
@@ -132,6 +133,21 @@ public class MyTable<T>
 		
 		return this;
 	}
+	public MyTable<T> headers(List<Object> headers)
+	{
+		return headers(MyCollection.toArray(headers,Object.class));
+	}
+	
+//	public MyTable<T> headers(Object... headers)
+//	{
+//		if( !hayHeaders )
+//		{
+//			tableModel.setColumnIdentifiers(headers);
+//			hayHeaders=true;			
+//		}
+//		
+//		return this;
+//	}
 
 	public MyTable<T> layout(int... widths)
 	{
