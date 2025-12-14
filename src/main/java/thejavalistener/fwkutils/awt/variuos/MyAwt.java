@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -359,26 +360,20 @@ public class MyAwt
 
 		return originalFont.deriveFont(attributes);
 	}
+	
+	public static Rectangle centerOnScreen(Window w,double porc)
+	{
+		Dimension d = MyAwt.getScreenSize(porc);
+		w.setSize(d);
+		center(w,null);
+		return w.getBounds();
+	}
 
 	public static Dimension getScreenSize(double porc)
 	{
 		Dimension d=Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension x=new Dimension((int)(d.width*porc),(int)(d.height*porc));
 		return x;
-		// // Obtener el tamaño de la pantalla
-		// GraphicsDevice
-		// gd=GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		// DisplayMode dm=gd.getDisplayMode();
-		//
-		// // Calcular el tamaño con el porcentaje
-		// int width=(int)(dm.getWidth()*porc);
-		// int height=(int)(dm.getHeight()*porc);
-		//
-		// // Crear un objeto Dimension con las dimensiones
-		// Dimension size=new Dimension(width,height);
-		//
-		// // Retornar el objeto Dimension
-		// return size;
 	}
 
 	public static void setWidth(Container c, int w)
@@ -440,7 +435,7 @@ public class MyAwt
 			child.setLocation(x,offsetFromTop);
 		}
 	}
-
+	
 	public static void setBackground(Container panel, Color color)
 	{
 		// Cambiar el color de fondo del panel actual
