@@ -16,11 +16,12 @@ public class MySplitPane
 	public static final int VERTICAL = JSplitPane.HORIZONTAL_SPLIT;
 	
 	private JSplitPane splitPane;
+	private int currOrientation;
 	
 	public MySplitPane(int orientation,Component c1,Component c2)
 	{
 		splitPane = new JSplitPane(orientation,c1,c2);
-		
+		this.currOrientation = orientation;
 		splitPane.addPropertyChangeListener("dividerLocation", new EscuchaDivider());
 		
 		BasicSplitPaneDivider divisorx = (BasicSplitPaneDivider) splitPane.getComponent(2);
@@ -29,6 +30,13 @@ public class MySplitPane
 		divisorx.setBorder(null);		
 		divisorx.setDividerSize(1);
 		splitPane.setBorder(null);		
+	}
+	
+	public void switchOrientation()
+	{
+		currOrientation=currOrientation==HORIZONTAL?VERTICAL:HORIZONTAL;
+		splitPane.setOrientation(currOrientation);
+		splitPane.revalidate();
 	}
 	
 	public void setDividerColor(Color c)

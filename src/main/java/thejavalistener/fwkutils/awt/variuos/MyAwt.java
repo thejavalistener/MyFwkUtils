@@ -291,11 +291,17 @@ public class MyAwt
 
 	}
 
-	/** Retorna: 0=>no, 1=> si */
+	/** Retorna: 0=>YES, 1=>NO */
 	public static int showConfirmYES_NO(String mssg, String title, Container owner)
 	{
 		String options[]= {"Si", "No"};
 		return showConfirmDialog(mssg,title,options,0,owner);
+	}
+	
+	public static void main(String[] args)
+	{
+		int x = showConfirmNO_YES("Pepe?","XX",null);
+		System.out.println(x);
 	}
 
 	public static void showErrorMessage(String mssg, String title, Container owner)
@@ -323,12 +329,6 @@ public class MyAwt
 	{
 		String options[]= {"No", "Si"};
 		return showConfirmDialog(mssg,title,options,0,owner);
-	}
-
-	public static void main(String[] args)
-	{
-		int x=showConfirmYES_NO("Pregunta","pp",null);
-		System.out.println("op="+x);
 	}
 
 	public static String inputText(String mssg, String title, Container parent)
