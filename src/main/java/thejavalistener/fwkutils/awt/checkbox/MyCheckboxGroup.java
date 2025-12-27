@@ -11,53 +11,45 @@ import thejavalistener.fwkutils.various.MyCollection;
 
 public class MyCheckboxGroup
 {
-    private List<JCheckBox> checkboxes;
+    private List<JCheckBox> checkboxes = new ArrayList<>();
     private JCheckBox selected;
 
     private ActionListener listener;
     private boolean listenerWorking = true;
 
-    private EscuchaCheckboxes escuchaCheckboxes;
-
-    public MyCheckboxGroup()
-    {
-        checkboxes = new ArrayList<>();
-        escuchaCheckboxes = new EscuchaCheckboxes();
-    }
-
-    public void setEnabled(boolean b)
-    {
-        for (JCheckBox cb : checkboxes)
-        {
-            cb.setEnabled(b);
-        }
-    }
-
-    public void setOthersEnabled(boolean b)
-    {
-        for (JCheckBox cb : checkboxes)
-        {
-            if (!cb.isSelected())
-            {
-                cb.setEnabled(b);
-            }
-        }
-    }
-
-    public void setActionListener(ActionListener listener)
-    {
-        this.listener = listener;
-    }
-
     public void addCheckbox(JCheckBox cb)
     {
         boolean prev = setListenerWorking(false);
 
-        cb.addActionListener(escuchaCheckboxes);
+        cb.addActionListener(e -> onCheckboxClicked(cb));
         cb.setSelected(false);
         checkboxes.add(cb);
 
         setListenerWorking(prev);
+    }
+
+    private void onCheckboxClicked(JCheckBox cb)
+    {
+        if (cb == selected)
+        {
+            cb.setSelected(true);
+            return;
+        }
+
+        if (selected != null)
+        {
+            selected.setSelected(false);
+        }
+
+        selected = cb;
+        selected.setSelected(true);
+
+        if (listener != null && listenerWorking)
+        {
+            listener.actionPerformed(
+                new ActionEvent(cb, 1, cb.getActionCommand())
+            );
+        }
     }
 
     public void setSelected(int idx)
@@ -77,19 +69,25 @@ public class MyCheckboxGroup
 
         if (listener != null && listenerWorking && throwEvent)
         {
-            ActionEvent e = new ActionEvent(selected, 1, selected.getText());
-            listener.actionPerformed(e);
+            listener.actionPerformed(
+                new ActionEvent(selected, 1, selected.getActionCommand())
+            );
         }
     }
 
-    public JCheckBox removeCheckbox(int idx)
+    public JCheckBox getSelected()
     {
-        return checkboxes.remove(idx);
+        return selected;
     }
 
-    public List<JCheckBox> getCheckboxes()
+    public int getSelectedIndex()
     {
-        return checkboxes;
+        return MyCollection.findPos(checkboxes, cb -> cb.isSelected());
+    }
+
+    public void setActionListener(ActionListener listener)
+    {
+        this.listener = listener;
     }
 
     public boolean setListenerWorking(boolean b)
@@ -99,47 +97,14 @@ public class MyCheckboxGroup
         return prev;
     }
 
-    public int getSelectedIndex()
+    public List<JCheckBox> getCheckboxes()
     {
-        return MyCollection.findPos(checkboxes, cb -> cb.isSelected());
-    }
-
-    public JCheckBox getSelected()
-    {
-        return selected;
+        return checkboxes;
     }
 
     public void removeAll()
     {
         checkboxes.clear();
         selected = null;
-    }
-
-    class EscuchaCheckboxes implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            JCheckBox cb = (JCheckBox) e.getSource();
-            if (cb == selected)
-            {
-                // Permitir deseleccionar (opcional)
-                cb.setSelected(true); // Evitar que el usuario lo desmarque
-                return;
-            }
-
-            if (selected != null)
-            {
-                selected.setSelected(false);
-            }
-
-            selected = cb;
-            selected.setSelected(true);
-
-            if (listener != null && listenerWorking)
-            {
-                listener.actionPerformed(e);
-            }
-        }
     }
 }

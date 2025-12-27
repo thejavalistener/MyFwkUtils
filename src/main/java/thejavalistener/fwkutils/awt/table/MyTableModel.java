@@ -10,15 +10,15 @@ public class MyTableModel extends DefaultTableModel
 		return false;
 	}
 	
-	 @Override
-     public Class<?> getColumnClass(int columnIndex) 
-	 {
-		 if( getRowCount()>0 )
-		 {
-			 Object v = getValueAt(0,columnIndex);
-			 return v.getClass();
-		 }
-		 
-		 return String.class;
-     }
+	@Override
+	public Class<?> getColumnClass(int columnIndex)
+	{
+	    if (getRowCount() > 0)
+	    {
+	        Object v = getValueAt(0, columnIndex);
+	        if (v != null)
+	            return v.getClass();
+	    }
+	    return String.class;
+	}
 }

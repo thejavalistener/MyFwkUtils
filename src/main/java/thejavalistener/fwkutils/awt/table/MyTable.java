@@ -119,8 +119,11 @@ public class MyTable<T>
 	            System.out.println("Fila copiada: " + rowText);
 	        }
 		}
-		
-		
+	}
+	
+	public MyTable<T> headers(String ...headers)
+	{
+		return headers((Object[])headers);
 	}
 
 	public MyTable<T> headers(Object[] headers)
