@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id 'java-library'
 }
 
 group = 'com.github.thejavalistener'
@@ -16,29 +16,17 @@ repositories {
 
 dependencies {
 
-    // Utilidades
-    implementation 'com.google.code.gson:gson:2.11.0'
-    implementation 'org.reflections:reflections:0.10.2'
+    // === PARTE DEL API ===
+    api 'com.google.code.gson:gson:2.11.0'
+    api 'com.google.zxing:core:3.5.2'
+    api 'com.google.zxing:javase:3.5.2'
 
-    // QR / Barcode
-    implementation 'com.google.zxing:core:3.5.2'
-    implementation 'com.google.zxing:javase:3.5.2'
+    // === IMPLEMENTACIÓN ===
+    implementation 'org.reflections:reflections:0.10.2'
 }
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-// --- Publicación para JitPack ---
-apply plugin: 'maven-publish'
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            groupId = 'com.github.thejavalistener'
-            artifactId = 'MyFwkUtils'
-            version = '1.0.0'
-        }
-    }
-}
