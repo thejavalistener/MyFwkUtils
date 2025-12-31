@@ -125,6 +125,8 @@ package thejava.listener.fwkutils.log;
 import java.io.FileOutputStream;
 import java.util.function.Function;
 
+import thejavalistener.fwkutils.various.MyFile;
+
 public class MyLog
 {
 	private static MyLog singleton = null;
@@ -312,4 +314,8 @@ public class MyLog
     	println(sout(true,true,true,true));
     }
 
+    public static String getMostRecentLogFileName(String logDir,String wildCardFileName)
+    {
+    	return MyFile.getMostRecentFileName(logDir,wildCardFileName);
+    }    
 }
