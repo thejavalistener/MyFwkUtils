@@ -96,21 +96,7 @@ public class UDate
 			int om = nc.get(Calendar.MONTH);
 			int od = nc.get(Calendar.DAY_OF_MONTH);
 
-			return y!=oy?y-oy:m!=om?m-om:d-od;
-			
-//			if( y==oy )
-//			{
-//				if( m==om )
-//				{
-//					return d-od;
-//				}
-//				
-//			}
-//			
-//			
-//			
-//			long ln = calendar.getTimeInMillis()-ts;
-//			return ln<0?-1:ln>0?1:0;						
+			return y!=oy?y-oy:m!=om?m-om:d-od;			
 		}		
 	}
 	
@@ -536,5 +522,38 @@ public class UDate
 	    return Date.valueOf(fecha);
 	}	
 
+    public static String getAsString(String mask)
+    {
+        return getAsString(System.currentTimeMillis(), mask);
+    }
+
+    public static String getAsString(long currTimeMillis, String mask)
+    {
+        LocalDateTime dt = LocalDateTime.ofInstant(
+                Instant.ofEpochMilli(currTimeMillis),
+                ZoneId.systemDefault()
+        );
+
+        String result = mask;
+
+        result = result.replace("YYYY", String.format("%04d", dt.getYear()));
+        result = result.replace("YY",   String.format("%02d", dt.getYear() % 100));
+        result = result.replace("MM",   String.format("%02d", dt.getMonthValue()));
+        result = result.replace("DD",   String.format("%02d", dt.getDayOfMonth()));
+        result = result.replace("hh",   String.format("%02d", dt.getHour()));
+        result = result.replace("mm",   String.format("%02d", dt.getMinute()));
+        result = result.replace("ss",   String.format("%02d", dt.getSecond()));
+
+        String ms = String.format("%03d", dt.getNano() / 1_000_000);
+        result = result.replace("fff", ms);
+        result = result.replace("mil", ms);
+
+        return result;
+    }
+    
+    public static void main(String[] args)
+	{
+		System.out.println( getAsString("YY-MM-DD, hhfff") );
+	}
 }
 

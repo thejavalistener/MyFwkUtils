@@ -29,7 +29,7 @@ public class MyFile
 		}
 	}
 	
-    public static String getMostRecentFileName(String dir, String wcard)
+    public static File getMostRecentFileName(String dir, String wcard)
     {
         File d = new File(dir);
         if (!d.exists() || !d.isDirectory())
@@ -71,6 +71,32 @@ public class MyFile
             }
         }
 
-        return last != null ? last.getAbsolutePath().replace('\\','/') : null;
+        return last != null ? last: null;
+    }
+
+    public static void writeFile(String fullFileName, String textContent)
+    {
+        try
+        {
+            java.nio.file.Path path = java.nio.file.Paths.get(fullFileName);
+
+            // Crear directorios si no existen
+            java.nio.file.Path parent = path.getParent();
+            if(parent != null)
+                java.nio.file.Files.createDirectories(parent);
+
+            // Escribir archivo (UTF-8), sobrescribe si existe
+            java.nio.file.Files.writeString(
+                path,
+                textContent,
+                java.nio.charset.StandardCharsets.UTF_8,
+                java.nio.file.StandardOpenOption.CREATE,
+                java.nio.file.StandardOpenOption.TRUNCATE_EXISTING
+            );
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException("Error escribiendo archivo: " + fullFileName, e);
+        }
     }
 }
