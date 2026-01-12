@@ -90,17 +90,6 @@ public class MyCollection
 		return r;
 	}
 	
-//	public static <T> T[] toArray(List<T> lst)
-//	{
-//		T ret[] = (T[])new Object[lst.size()];
-//		int i=0;
-//		for(T t:lst)
-//		{
-//			ret[i++] = t;
-//		}
-//		
-//		return ret;
-//	}
 	
 	public static <T,R> List<R> extract(T[] arr,Function<T,R> tToR)
 	{

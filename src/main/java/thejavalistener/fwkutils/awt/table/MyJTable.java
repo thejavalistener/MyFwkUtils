@@ -46,4 +46,17 @@ class MyJTable extends JTable
 
 		return c;
 	}	
+	
+	@Override
+	public String getToolTipText(java.awt.event.MouseEvent e)
+	{
+		int row = rowAtPoint(e.getPoint());
+		int col = columnAtPoint(e.getPoint());
+
+		if (row == -1 || col == -1) return null;
+
+		Object v = getValueAt(row, col);
+		return v != null ? v.toString() : null;
+	}
+
 }
