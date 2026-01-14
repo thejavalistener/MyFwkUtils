@@ -7,7 +7,7 @@ import java.awt.Insets;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import thejava.listener.fwkutils.log.MyLog;
+import thejava.listener.fwkutils.log2.MyLogs;
 import thejavalistener.fwkutils.awt.variuos.MyAwt;
 import thejavalistener.fwkutils.string.MyString;
 
@@ -36,7 +36,7 @@ public class MyPanel extends JPanel {
         	setBackground(MyAwt.randomColor());
         	
         	String thisPkg = getClass().getPackageName();
-    		StackTraceElement ste = MyLog.get().currStackTrace(d->d.getClassName().startsWith(thisPkg));
+    		StackTraceElement ste = MyLogs.get().currStackTrace(d->d.getClassName().startsWith(thisPkg));
     		String sOwner = MyString.substringAfterLast(ste.getClassName(),".");
     		int line = ste.getLineNumber();
         	globalDebugId++;

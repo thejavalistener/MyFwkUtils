@@ -3,7 +3,6 @@ package thejavalistener.myfwkutils.texttable;
 import java.sql.ResultSet;
 import java.util.List;
 
-import thejava.listener.fwkutils.log.MyLog;
 import thejavalistener.fwkutils.string.MyString;
 import thejavalistener.fwkutils.various.MyNumber;
 
