@@ -129,7 +129,7 @@ public class MyCollection
 		return findElm(list,func);
 	}
 	
-	/** Busca K k en List<T> list, retorna T o null si no lo encuentra */
+	/** Busca K k en list, retorna T o null si no lo encuentra */
 	public static <T> T findElm(List<T> list,Function<T,Boolean> func)
 	{
 		for(T t:list)
@@ -150,7 +150,7 @@ public class MyCollection
 		return findElm(list,k,func);
 	}
 	
-	/** Busca K k en List<T> list, retorna T o null si no lo encuentra */
+	/** Busca K k en list, retorna T o null si no lo encuentra */
 	public static <T,K> T findElm(List<T> list,K k,BiFunction<T,K,Boolean> func)
 	{
 		for(T t:list)
@@ -171,7 +171,7 @@ public class MyCollection
 		return findPos(list,func);
 	}
 	
-	/** Busca K k en List<T> list, retorna su posicion o -1 si no lo encuentra */
+	/** Busca K k en list, retorna su posicion o -1 si no lo encuentra */
 	public static <T> int findPos(List<T> list,Function<T,Boolean> func)
 	{
 		int i=0;
@@ -196,7 +196,7 @@ public class MyCollection
 		return findPos(list,k,func);
 	}
 	
-	/** Busca K k en List<T> list, retorna su posicion o -1 si no lo encuentra */
+	/** Busca K k en list, retorna su posicion o -1 si no lo encuentra */
 	public static <T,K> int findPos(List<T> list,K k,BiFunction<T,K,Boolean> func)
 	{
 		int i=0;

@@ -1,0 +1,9 @@
+Pepino CARUSO!! Pepino CARUSO!! Pepino CARUSO!! Pepino CARUSO!! Pepino CARUSO!! Pepino CARUSO!! [INFO] Pepino CARUSO!! [INFO] Pepino CARUSO!! [WARN] Pepino CARUSO!! [INFO] Pepino CARUSO!! 
+[INFO] Pepino CARUSO!! 
+[WARN] Pepino CARUSO!! 
+[thejava.listener.fwkutils.log2.MyLog2Test][main][11][1768387968970] 
+[thejava.listener.fwkutils.log2.MyLog2Test][main][12][1768387968970] 
+[thejava.listener.fwkutils.log2.MyLog2Test][main][12][1768388068510] 
+[thejava.listener.fwkutils.log2.MyLog2Test][main][13][1768388068511] 
+[thejava.listener.fwkutils.log2.MyLog2Test][main][12][1768389662863] 
+[thejava.listener.fwkutils.log2.MyLog2Test][main][13][1768389662863] 
