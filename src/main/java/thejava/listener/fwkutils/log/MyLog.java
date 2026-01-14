@@ -1,4 +1,4 @@
-package thejava.listener.fwkutils.log2;
+package thejava.listener.fwkutils.log;
 
 import java.io.File;
 import java.io.FileOutputStream;

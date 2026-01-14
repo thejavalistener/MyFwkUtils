@@ -1,4 +1,4 @@
-package thejava.listener.fwkutils.log2;
+package thejava.listener.fwkutils.log;
 
 public class MyLogConfig
 {

@@ -7,7 +7,7 @@ import java.awt.Insets;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import thejava.listener.fwkutils.log2.MyLogs;
+import thejava.listener.fwkutils.log.MyLogs;
 import thejavalistener.fwkutils.awt.variuos.MyAwt;
 import thejavalistener.fwkutils.string.MyString;
 
