@@ -8,6 +8,7 @@ public class MyLogConfig
     public String infoTag    = "INFO";
     public String errorTag   = "ERR ";
     public String warningTag = "WARN";
+    public String debugTag =   "DBG ";
     public boolean enableConsoleEcho = true;
     public boolean showTimestamp = false;
     

@@ -28,7 +28,7 @@ public class MyFile
 			throw new RuntimeException(e);
 		}
 	}
-	
+		
     public static File getMostRecentFileName(String dir, String wcard)
     {
         File d = new File(dir);

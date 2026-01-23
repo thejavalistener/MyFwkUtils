@@ -1,5 +1,9 @@
 package thejava.listener.fwkutils.log;
 
+import java.io.File;
+
+import thejavalistener.fwkutils.various.MyFile;
+
 public final class MyLogs
 {
     private static volatile MyLog INSTANCE;
@@ -32,5 +36,5 @@ public final class MyLogs
             }
         }
         return INSTANCE;
-    }
+    }    
 }

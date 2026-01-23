@@ -154,6 +154,26 @@ public class MyLog
 		String msg="["+tag+"] "+o;
 		println(msg);
 	}
+	
+	public void debug(Object o)
+	{
+	    boolean showClassName = config.showClassName;
+	    boolean showLineNumber = config.showLineNumber;
+	    boolean showMethodName = config.showMethodName;
+		boolean showTimestamp = config.showTimestamp;
+
+	    config.showClassName  = true;
+	    config.showLineNumber = true;
+	    config.showMethodName = true;
+		config.showTimestamp  = true;
+		
+		_tagged(config.debugTag,o.toString());
+		
+	    config.showClassName  = showClassName ;
+	    config.showLineNumber = showLineNumber;
+	    config.showMethodName = showMethodName;
+		config.showTimestamp  = showTimestamp ;
+	}
 
 	public void info(Object o)
 	{
@@ -201,10 +221,5 @@ public class MyLog
 	public void qdbg()
 	{
 		println(sout(true,true,true,true));
-	}
-
-	public static File getMostRecentLogFileName(String logDir, String wildCardFileName)
-	{
-		return MyFile.getMostRecentFileName(logDir,wildCardFileName);
 	}
 }
