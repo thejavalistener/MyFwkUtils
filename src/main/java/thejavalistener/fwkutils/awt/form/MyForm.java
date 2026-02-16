@@ -19,6 +19,8 @@ public class MyForm
 	private JPanel formPanel;
 	private JPanel contentPane;
 
+	private boolean formMaked=false;
+	
 	private int width;
 	private List<MyFormRow> mfRows = null;
 	
@@ -132,6 +134,13 @@ public class MyForm
 
 			formPanel.add(rowPanel);
 		}
+		
+		formMaked = true;
+	}
+	
+	public boolean isFormMaked()
+	{
+		return formMaked;
 	}
 	
 	public void setEnabled(boolean b)

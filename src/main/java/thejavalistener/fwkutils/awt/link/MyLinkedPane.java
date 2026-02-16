@@ -150,7 +150,7 @@ public class MyLinkedPane
 	
 	public void applyStyle()
 	{
-//		linkPanel.setBackground(style.linkPanelBackground);
+		
 		linkPanel.setInsets(style.linkPanelInsets);
 		splitPane.setBackground(style.linkPanelBackground);
 		splitPane.setDividerSize(style.dividerSize);
@@ -159,6 +159,8 @@ public class MyLinkedPane
 			lnk.setStyle(style.linkStyle);
 			lnk.applyStyle();
 		}
+//		linkPanel.c().setBackground(style.linkPanelBackground);
+		setBackground(style.linkPanelBackground);
 	}
 	
 	public List<MyLink> getLinks()

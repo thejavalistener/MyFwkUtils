@@ -1333,4 +1333,17 @@ public class MyString
 		return Long.toString(x).length();
 	}
 	
+	public static String trimMiddle(String s, int len)
+	{
+	    if (s.length() <= len) return s;
+
+	    int remove = s.length() - len;
+
+	    int startKeep = (s.length() - remove) / 2;
+	    int endKeepStart = startKeep + remove;
+
+	    return s.substring(0, startKeep) + s.substring(endKeepStart);
+	}
+
+	
 }

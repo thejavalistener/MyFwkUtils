@@ -17,7 +17,6 @@ import javax.swing.SwingUtilities;
 import thejavalistener.fwkutils.string.MyString;
 import thejavalistener.fwkutils.various.MyCollection;
 
-//@Component
 public class MyConsole extends MyConsoleBase
 {
 	// listeners

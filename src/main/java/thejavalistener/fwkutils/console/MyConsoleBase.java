@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.text.StyledDocument;
 
+import thejava.listener.fwkutils.log.MyLogs;
 import thejavalistener.fwkutils.awt.panel.MyBorderLayout;
 import thejavalistener.fwkutils.awt.text.MyTextPane;
 import thejavalistener.fwkutils.awt.variuos.MyAwt;
@@ -99,6 +100,7 @@ public abstract class MyConsoleBase
 	
 	public static MyConsole singleton()
 	{
+		MyLogs.get().debug("--- OJO: singleton dejará de existir...");
 		if( singleton==null )
 		{
 			singleton = new MyConsole();
