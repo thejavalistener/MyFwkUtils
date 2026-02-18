@@ -29,6 +29,7 @@ import javax.swing.text.StyledDocument;
 
 import thejava.listener.fwkutils.log.MyLogs;
 import thejavalistener.fwkutils.awt.panel.MyBorderLayout;
+import thejavalistener.fwkutils.awt.panel.MyScrollPane;
 import thejavalistener.fwkutils.awt.text.MyTextPane;
 import thejavalistener.fwkutils.awt.variuos.MyAwt;
 import thejavalistener.fwkutils.string.MyString;
@@ -234,7 +235,7 @@ public abstract class MyConsoleBase
 		contentPane.setBorder(null);
 		
 		textPane=new MyTextPane(false,true);
-		scrollPane=new JScrollPane(textPane.c());
+		scrollPane=new MyScrollPane(textPane.c());
 		scrollPane.setBorder(null);
 		contentPane.add(scrollPane,BorderLayout.CENTER);
 						

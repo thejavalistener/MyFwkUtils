@@ -48,7 +48,19 @@ public class MyTextPane
 	 */
 	public MyTextPane(boolean listenPS,boolean enableZoomInOut)
 	{
-		textPane=new JTextPane();
+//		textPane=new JTextPane();
+		
+		 // Aquí instanciás el JTextPane anónimo
+        textPane = new JTextPane() {
+            @Override
+            public boolean getScrollableTracksViewportWidth() {
+                return false; // evita que se ajuste al ancho del viewport
+            }
+        };
+		
+		
+		
+		
 		textPane.setBorder(null);
 		textPane.addKeyListener(new EscuchaALTP());
 		setListenParametrizedString(listenPS);
