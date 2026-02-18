@@ -10,7 +10,7 @@ public class ProgressMeter extends Progress
 	}
 	
 	@Override
-	protected Progress begin()
+	public Progress begin()
 	{
 		initProgressTime=System.currentTimeMillis();
 		curr=0;
@@ -60,6 +60,13 @@ public class ProgressMeter extends Progress
 			console.print("100").print("%");
 			console.skipFwd();
 		}
+	}
+	
+	
+	@Override
+	public void setPercent(int pct, String mssg)
+	{
+		throw new RuntimeException("No implementado");
 	}
 }
 

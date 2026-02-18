@@ -1,11 +1,55 @@
 package thejavalistener.fwkutils.console;
 
+import thejavalistener.fwkutils.string.MyString;
+
 public class ProgressBar extends Progress
 {
 	private int size;
 	private long top;
-	
+
 	private int lastCorch;
+
+	
+	private int currPercent=0;
+	
+	public void setPercent(int pct, String mssg)
+	{
+		
+	    _verifyThread();
+
+	    if (pct < 0) pct = 0;
+	    if (pct > 100) pct = 100;
+	    if( pct <=currPercent) return;
+
+	    int prevBlocks = (currPercent * size) / 100;
+	    int newBlocks  = (pct * size) / 100;
+
+	    int toPrint = newBlocks - prevBlocks;
+
+	    if (toPrint > 0)
+	    {
+	        console.cs(console.getStyle().progressStyle);
+	        String popo = MyString.replicate(console.getStyle().progressFill, toPrint);
+	        System.out.println(popo.length());
+	        console.print(popo);
+	        console.X();
+	    }
+
+	    currPercent = pct;
+
+	    if (mssg != null)
+	    {
+	        int x = console.getCaretPosition();
+	        console.setCaretPosition(lastCorch);
+	        console.print(" " + mssg);
+	        console.setCaretPosition(x);
+	    }
+	    
+	    if( currPercent==100 )
+	    {
+	    	console.skipFwd(2);
+	    }
+	}
 
 	public ProgressBar(MyConsoleBase c,int size,long top)
 	{
@@ -14,7 +58,7 @@ public class ProgressBar extends Progress
 		this.top = top;
 	}
 	
-	protected Progress begin()
+	public Progress begin()
 	{
 		curr=0;
 		console.print("[");
@@ -34,36 +78,51 @@ public class ProgressBar extends Progress
 		return this;
 	}
 
+//	public void increase(String mssg)
+//	{
+//		_verifyThread();
+//		
+//		curr++;
+//		double porc=((double)curr/top)*size;
+//
+//		if(ant!=(int)porc)
+//		{				
+//			console.cs(console.getStyle().progressStyle);
+//			console.print(console.getStyle().progressFill);
+//			console.X();
+//			int x = console.getCaretPosition();
+//			console.setCaretPosition(lastCorch);
+//			console.print(" "+mssg);
+//			console.setCaretPosition(x);
+//			
+//			ant=(int)porc;
+//		}
+//
+//		if(ant==size)
+//		{
+//			ant=0;
+//			console.skipFwd();
+//			console.X();
+//		}
+//	}
+
 	public void increase(String mssg)
 	{
-		_verifyThread();
-		
-		curr++;
-		double porc=((double)curr/top)*size;
+	    _verifyThread();
 
-		if(ant!=(int)porc)
-		{				
-			console.cs(console.getStyle().progressStyle);
-			console.print(console.getStyle().progressFill);
-			console.X();
-			int x = console.getCaretPosition();
-			console.setCaretPosition(lastCorch);
-			console.print(" "+mssg);
-			console.setCaretPosition(x);
-			
-			ant=(int)porc;
-		}
+	    curr++;
 
-		if(ant==size)
-		{
-			ant=0;
-			console.skipFwd();
-			console.X();
-		}
+	    if (top <= 0) return;
+
+	    int pct = (int)((curr * 100L) / top);
+
+	    setPercent(pct, mssg);
 	}
-	
+
 	public void increase()
 	{
 		increase("");
 	}
+	
+	
 }

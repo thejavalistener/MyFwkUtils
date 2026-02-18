@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 
 import javax.swing.SwingUtilities;
 
+import thejavalistener.fwkutils.string.MyString;
 import thejavalistener.fwkutils.various.MyCollection;
 import thejavalistener.fwkutils.various.MyThread;
 
@@ -23,20 +24,31 @@ public abstract class Progress
 	protected Long finishProgressTime;
 	
 	protected boolean inOwnThread = false;
+	private boolean usingThread = true;
 	
-	protected abstract Progress begin();
+	public abstract Progress begin();
 
-	public abstract void increase();
+	public void increase()
+	{
+		increase("");
+	}
+	
 	public abstract void increase(String mssg);
 	
 	protected void _verifyThread()
 	{
-		if( !inOwnThread )
+		if( usingThread && !inOwnThread )
 		{
 			throw new IllegalStateException("Debe incrementar el progreso dentro del método execute()");
 		}
 	}
-
+	
+	public void  setUsingThread(boolean b)
+	{
+		usingThread = b;
+	}
+	
+	
 	protected Progress(MyConsoleBase c)
 	{
 		this.console=c;
@@ -44,28 +56,6 @@ public abstract class Progress
 		secondaryLoop=eventQueue.createSecondaryLoop();
 	}
 	
-//	public MyConsoleBase execute(Runnable r)
-//	{
-//		EventQueue eventQueue=Toolkit.getDefaultToolkit().getSystemEventQueue();
-//		SecondaryLoop loop=eventQueue.createSecondaryLoop();
-//
-//		MyCollection.invoke(console.getListeners(),t -> t.waitingForUserInput(true));
-//
-//		MyThread.start(() -> {
-//			inOwnThread = true;
-//			begin();
-//			r.run();
-//			loop.exit();
-//			finish();
-//			
-//			inOwnThread = false;
-//			MyCollection.invoke(console.getListeners(),t -> t.waitingForUserInput(false));
-//		});
-//
-//		loop.enter();
-//		return console;
-//	}
-
 	public MyConsoleBase execute(Runnable r) {
 	    EventQueue eventQueue = Toolkit.getDefaultToolkit().getSystemEventQueue();
 	    SecondaryLoop loop = eventQueue.createSecondaryLoop();
@@ -113,13 +103,15 @@ public abstract class Progress
 	}
 	
 	
-	protected void finish()
+	public void finish()
 	{
-		while(curr<top)
-		{
-			increase();
-		}
+//		while(curr<top)
+//		{
+//			increase();
+//		}
 
+		setPercent(100,"");
+		
 		console.X();
 
 		console.skipFwd();
@@ -134,4 +126,13 @@ public abstract class Progress
 		finishProgressTime=System.currentTimeMillis()-initProgressTime;		
 		return finishProgressTime;
 	}
+	
+	private int currPercent=0;
+	
+	public void setPercent(int pct)
+	{
+		setPercent(pct,"");
+	}
+	
+	public abstract void setPercent(int pct,String mssg);
 }
