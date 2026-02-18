@@ -39,14 +39,24 @@ public class MyTextPane
 
 	public MyTextPane()
 	{
-		this(false,false);
+		this(false,false,false);
+	}
+	
+	public MyTextPane(boolean allowAutoScroll)
+	{
+		this(false,false,allowAutoScroll);
+	}
+	
+	public MyTextPane(boolean listenPS,boolean enableZoomInOut)
+	{
+		this(listenPS,enableZoomInOut,true);
 	}
 
 	/**
 	 * Escucha ALT+P y abre un form dinámico para que el usuario ingrese valores
 	 * con los cuales reemplazar los ${}
 	 */
-	public MyTextPane(boolean listenPS,boolean enableZoomInOut)
+	public MyTextPane(boolean listenPS,boolean enableZoomInOut,boolean allowAutoScroll)
 	{
 //		textPane=new JTextPane();
 		
@@ -54,12 +64,9 @@ public class MyTextPane
         textPane = new JTextPane() {
             @Override
             public boolean getScrollableTracksViewportWidth() {
-                return false; // evita que se ajuste al ancho del viewport
+                return !allowAutoScroll; // evita que se ajuste al ancho del viewport
             }
         };
-		
-		
-		
 		
 		textPane.setBorder(null);
 		textPane.addKeyListener(new EscuchaALTP());
