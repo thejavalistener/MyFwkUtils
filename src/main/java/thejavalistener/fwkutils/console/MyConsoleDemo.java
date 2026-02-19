@@ -6,7 +6,7 @@ public class MyConsoleDemo
 {
 	public static void main(String[] args)
 	{
-		MyConsole c = MyConsole.openWindow("Demo");
+		MyConsole c = MyConsoles.getOnWindow("Demo");
 		
 		// un banner
 		c.banner("Esto es un banner!");
@@ -91,6 +91,7 @@ public class MyConsoleDemo
 		
 		// fin
 		c.println("Presiona una tecla para finalizar... ").pressAnyKey();
-		c.print("Cerrando en ").closeAndExit(3);
+		c.print("Cerrando en ");
+		MyConsoles.closeAndExit(3);
 	}
 }

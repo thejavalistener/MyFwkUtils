@@ -1,7 +1,10 @@
 package thejavalistener.fwkutils.awt.text;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -13,6 +16,7 @@ import java.util.Stack;
 
 import javax.swing.JFrame;
 import javax.swing.JTextPane;
+import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -58,15 +62,18 @@ public class MyTextPane
 	 */
 	public MyTextPane(boolean listenPS,boolean enableZoomInOut,boolean allowAutoScroll)
 	{
-//		textPane=new JTextPane();
-		
+		if( allowAutoScroll )
 		 // Aquí instanciás el JTextPane anónimo
         textPane = new JTextPane() {
             @Override
             public boolean getScrollableTracksViewportWidth() {
-                return !allowAutoScroll; // evita que se ajuste al ancho del viewport
+                return getUI().getPreferredSize(this).width <= getParent().getSize().width;
             }
         };
+        else
+        {
+        	textPane = new JTextPane();
+        }
 		
 		textPane.setBorder(null);
 		textPane.addKeyListener(new EscuchaALTP());
@@ -480,6 +487,17 @@ public class MyTextPane
 	}
 	
 	
+	public int cols() 
+	{
+	    Container p = SwingUtilities.getAncestorOfClass(JViewport.class, textPane);
+	    int px = (p != null ? ((JViewport)p).getWidth() : textPane.getWidth());
+
+	    Insets in = textPane.getInsets();
+	    px -= (in.left + in.right);
+
+	    FontMetrics fm = textPane.getFontMetrics(textPane.getFont());
+	    return Math.max(0, px / fm.charWidth('W')); // o '0'
+	}
 	
 
 	class EscuchaALTP implements KeyListener

@@ -53,63 +53,6 @@ public abstract class MyConsoleBase
 	public static final TriFunction<Character,Integer,String,Character> AÑZ=(c, kc, s) -> c>='A'&&c<='Z'||c=='Ñ'||_validKeyCode(kc)?c:null;
 	public static final TriFunction<Character,Integer,String,Character> AZ=(c, kc, s) -> c>='A'&&c<='Z'||_validKeyCode(kc)?c:null;
 
-	private static JFrame frame = null;
-	private static MyConsole singleton = null;
-	private static Runnable shutdownhook;
-	
-	public static MyConsole openWindow(String title)
-	{
-		return openWindow(title,()->{});
-	}
-	
-	public static MyConsole openWindow(String title,Runnable stdhook)
-	{
-	    // Obtener dimensiones de pantalla
-	    Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-
-	    // Definir proporciones (ejemplo: 30% ancho, 30% alto)
-	    int width = (int) (screen.width * .7);
-	    int height = (int) (screen.height * .7);
-
-	    return openWindow(title, width, height,stdhook);
-	}
-	
-	public static MyConsole openWindow(String title, int width, int height)
-	{
-		return openWindow(title,width,height,()->{});
-	}
-	
-	public static MyConsole openWindow(String title, int width, int height,Runnable stdhook)
-	{
-		MyAwt.setWindowsLookAndFeel();
-		
-		MyConsole c = singleton();
-		
-	    frame = new JFrame(title != null ? title : "Console");
-	    frame.addWindowListener(new EscuchaWindow());
-	    frame.add(c.c(),BorderLayout.CENTER); // usa el contentPane de la instancia singleton
-	    frame.setSize(width > 0 ? width : 600, height > 0 ? height : 400);
-	    shutdownhook = stdhook;
-	    
-	    // listeners para cerrar
-	    c.textPane.addKeyListener(new EscuchaCTRLCyESC());
-	    
-	    MyAwt.center(frame,null);
-	    frame.setVisible(true);
-	    return c;
-	}
-	
-	public static MyConsole singleton()
-	{
-		MyLogs.get().debug("--- OJO: singleton dejará de existir...");
-		if( singleton==null )
-		{
-			singleton = new MyConsole();
-		}
-		
-		return singleton;
-	}
-	
 	public MyConsoleBase countdownln(int secs)
 	{
 		countdown(secs);
@@ -120,33 +63,15 @@ public abstract class MyConsoleBase
 	
 	public MyConsoleBase countdown(int secs)
 	{
-		for(int i=secs;i>0;i--)
-		{
-			print(i+"s.");
-			MyThread.sleep(1000);
-			skipBkp(3);
-		}
-		
-		return this;
+	    for (int i = secs; i > 0; i--)
+	    {
+	        String s = i + "s.";
+	        print(s);
+	        MyThread.sleep(1000);
+	        skip(s.length());
+	    }
+	    return this;
 	}
-	
-	public void closeAndExit(int secs)
-	{
-		if( frame!=null )
-		{
-			// notifico al lisener
-			shutdownhook.run();
-			
-			// cuenta regresiva...
-			countdown(secs);
-			
-			// chau
-			frame.setVisible(false);
-			frame.dispose();
-			System.exit(0);
-		}
-	}
-
 	
 	protected abstract String _readString(InputConfigurator isconfig);
 
@@ -160,7 +85,6 @@ public abstract class MyConsoleBase
 
 	protected MyTextPane textPane;
 	protected JScrollPane scrollPane;
-	
 	
 	protected JPanel contentPane;
 	
@@ -234,7 +158,7 @@ public abstract class MyConsoleBase
 		contentPane = new MyBorderLayout();
 		contentPane.setBorder(null);
 		
-		textPane=new MyTextPane(false,true);
+		textPane=new MyTextPane(false,true,true);
 		scrollPane=new MyScrollPane(textPane.c());
 		scrollPane.setBorder(null);
 		contentPane.add(scrollPane,BorderLayout.CENTER);
@@ -315,7 +239,6 @@ public abstract class MyConsoleBase
 	public MyConsoleBase print(Object o)
 	{
 	    init();
-	    open();
 
 	    String s = o == null ? "null" : o.toString();
 	    String[][] toPrint = _extractFormattedText(s);
@@ -598,13 +521,13 @@ public abstract class MyConsoleBase
 		return println();
 	}
 
-	public MyConsoleBase skipBkp()
+	public MyConsoleBase skip()
 	{
 		textPane.setCaretPosition(0);
 		return this;
 	}
 
-	public MyConsoleBase skipBkp(int n)
+	public MyConsoleBase skip(int n)
 	{
 		textPane.setCaretPosition(textPane.getCaretPosition()-n);
 		return this;
@@ -663,6 +586,19 @@ public abstract class MyConsoleBase
 		println();
 		return x;
 	}
+	
+	public MyConsoleBase skipBkp()
+	{
+		textPane.setCaretPosition(0);
+		return this;
+	}
+
+	public MyConsoleBase skipBkp(int n)
+	{
+		textPane.setCaretPosition(textPane.getCaretPosition()-n);
+		return this;
+	}
+
 
 	public Integer readInteger()
 	{
@@ -713,16 +649,6 @@ public abstract class MyConsoleBase
 		Double d=readDouble();
 		println();
 		return d;
-	}
-
-	public void open()
-	{
-		init();
-
-		if(!contentPane.isVisible())
-		{
-			contentPane.setVisible(true);
-		}
 	}
 
 	public Progress progressBar(int size, long top)
@@ -987,24 +913,6 @@ public abstract class MyConsoleBase
 		textPane.setCaretPosition(pos);
 	}
 
-	static class EscuchaWindow extends WindowAdapter
-	{
-		@Override
-		public void windowClosing(WindowEvent e)
-		{
-			if( _confirmaSalir() )
-			{
-				singleton.closeAndExit(0);
-			}
-		}
-	}    
-	
-	private static boolean _confirmaSalir()
-	{
-		int r=JOptionPane.showConfirmDialog(frame,"¿Esta acción finalizará el programa?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-		return r==JOptionPane.YES_OPTION;
-	}
-
 	class EscuchaMouse extends MouseAdapter
 	{
 		@Override
@@ -1021,20 +929,4 @@ public abstract class MyConsoleBase
 			}
 		}
 	}
-
-	static class EscuchaCTRLCyESC extends KeyAdapter
-	{
-		@Override
-		public void keyPressed(KeyEvent e)
-		{
-			if(e.isControlDown()&&e.getKeyCode()==KeyEvent.VK_C||e.getKeyCode()==KeyEvent.VK_ESCAPE)
-			{
-				e.consume();
-				if( frame!=null && _confirmaSalir() )
-				{
-					singleton.closeAndExit(0);
-				}
-			}
-		}
-	}	
 }
