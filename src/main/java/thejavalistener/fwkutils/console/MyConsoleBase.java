@@ -63,9 +63,11 @@ public abstract class MyConsoleBase
 	
 	public MyConsoleBase countdown(int secs)
 	{
+		int len = MyString.digits(secs)+2;
 	    for (int i = secs; i > 0; i--)
 	    {
-	        String s = i + "s.";
+	        String s = MyString.rpad(i + "s.",' ',len);
+	        
 	        print(s);
 	        MyThread.sleep(1000);
 	        skip(s.length());
@@ -651,14 +653,25 @@ public abstract class MyConsoleBase
 		return d;
 	}
 
+	public Progress progressBar2(int size, long top)
+	{
+		Progress p = new ProgressBar2(this,size,top);
+	    p.begin();   
+	    return p;    
+	}
+	
 	public Progress progressBar(int size, long top)
 	{
-		return new ProgressBar(this,size,top);
+		Progress p = new ProgressBar(this,size,top);
+	    p.begin();   
+        return p;    
 	}
-
+	
 	public Progress progressMeter(int top)
 	{
-		return new ProgressMeter(this,top);
+		Progress p = new ProgressMeter(this,top);
+		p.begin();
+		return p;
 	}
 
 	public void addListener(MyConsoleListener lst)

@@ -27,8 +27,6 @@ public class ProgressMeter extends Progress
     @Override
     public void increase(String mssg)
     {
-        _verifyThread();
-
         if (top <= 0) return;
 
         curr++;
@@ -75,5 +73,5 @@ public class ProgressMeter extends Progress
             console.print("100% ");
             console.skipFwd();
         }
-    }
+    }    
 }

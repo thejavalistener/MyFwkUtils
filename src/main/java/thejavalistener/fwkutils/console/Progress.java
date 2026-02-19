@@ -24,9 +24,8 @@ public abstract class Progress
 	protected Long finishProgressTime;
 	
 	protected boolean inOwnThread = false;
-	private boolean usingThread = true;
 	
-	public abstract Progress begin();
+	protected abstract Progress begin();
 
 	public void increase()
 	{
@@ -34,20 +33,6 @@ public abstract class Progress
 	}
 	
 	public abstract void increase(String mssg);
-	
-	protected void _verifyThread()
-	{
-		if( usingThread && !inOwnThread )
-		{
-			throw new IllegalStateException("Debe incrementar el progreso dentro del método execute()");
-		}
-	}
-	
-	public void  setUsingThread(boolean b)
-	{
-		usingThread = b;
-	}
-	
 	
 	protected Progress(MyConsoleBase c)
 	{
@@ -102,14 +87,8 @@ public abstract class Progress
 	    return console;
 	}
 	
-	
-	public void finish()
+	public final void finish()
 	{
-//		while(curr<top)
-//		{
-//			increase();
-//		}
-
 		setPercent(100,"");
 		
 		console.X();

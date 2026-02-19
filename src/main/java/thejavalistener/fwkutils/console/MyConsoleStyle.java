@@ -19,6 +19,6 @@ public class MyConsoleStyle
 	public String defaultInputStyle = "[fg(GREEN)]";
 	
 	// progress
-	public char progressFill = ' ';
-	public String progressStyle = "[bg(GREEN)]";
+	public char progressFill = '#';
+	public String progressStyle = null;
 }
