@@ -8,7 +8,7 @@ public class MyConsoleStyle
 	// font
 	public String fontFamily = "Consolas";
 	public int fontStyle = Font.PLAIN;
-	public int fontSize = 14;
+	public int fontSize = 15;
 	
 	// textArea
 	public Color background = Color.BLACK;

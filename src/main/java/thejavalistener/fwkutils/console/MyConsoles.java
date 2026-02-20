@@ -40,8 +40,10 @@ public class MyConsoles
 	    Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 
 	    // Definir proporciones (ejemplo: 30% ancho, 30% alto)
-	    int width = (int) (screen.width * .7);
-	    int height = (int) (screen.height * .7);
+	    
+	    // por defecto tomo la proporción de la consola de windows
+	    int width = (int) (screen.width * .78);    
+	    int height = (int) (screen.height * .715);
 
 	    return getOnWindow(title, width, height,stdhook);
 	}
