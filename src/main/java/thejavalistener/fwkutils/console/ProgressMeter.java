@@ -70,7 +70,7 @@ public class ProgressMeter extends Progress
         }
         else
         {
-            console.print("100% ");
+            console.print("100%");
             console.skipFwd();
         }
     }    
