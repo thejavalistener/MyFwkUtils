@@ -673,7 +673,7 @@ public abstract class MyConsoleBase
 		p.begin();
 		return p;
 	}
-
+	
 	public void addListener(MyConsoleListener lst)
 	{
 		listeners.add(lst);
