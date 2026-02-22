@@ -64,4 +64,18 @@ public class MyException extends Exception
 			return false;
 		}
 	}
+	
+	public static String stackTraceToString(Throwable e)
+	{
+	    if (e == null) return "";
+
+	    java.io.StringWriter sw = new java.io.StringWriter();
+	    java.io.PrintWriter pw = new java.io.PrintWriter(sw);
+	    e.printStackTrace(pw);
+	    pw.flush();
+
+	    String s = sw.toString().replace("\r\n", "\n");
+	    if (!s.endsWith("\n")) s += "\n";
+	    return s;
+	}
 }

@@ -70,7 +70,8 @@ public abstract class MyConsoleBase
 	        
 	        print(s);
 	        MyThread.sleep(1000);
-	        skip(s.length());
+	        skipBkp(s.length());
+	        
 	    }
 	    return this;
 	}
@@ -404,28 +405,54 @@ public abstract class MyConsoleBase
 		}
 	}
 
+//	private static String[] _reemplazarOAñadir(String original, int posicion, String reemplazo)
+//	{
+//		int x=MyString.charCount(original,'\r');
+//		int longitudOriginal=original.length()-x;
+//		int longitudReemplazo=reemplazo.length();
+//
+//		String parteReemplaza;
+//		String parteAñadida="";
+//
+//		if(posicion+longitudReemplazo<=longitudOriginal)
+//		{
+//			parteReemplaza=reemplazo;
+//		}
+//		else
+//		{
+//			parteReemplaza=reemplazo.substring(0,longitudOriginal-posicion);
+//			parteAñadida=reemplazo.substring(longitudOriginal-posicion);
+//		}
+//
+//		return new String[] {parteReemplaza, parteAñadida};
+//	}
+
 	private static String[] _reemplazarOAñadir(String original, int posicion, String reemplazo)
 	{
-		int x=MyString.charCount(original,'\r');
-		int longitudOriginal=original.length()-x;
-		int longitudReemplazo=reemplazo.length();
+	    int longitudOriginal = original.length();
+	    int longitudReemplazo = reemplazo.length();
 
-		String parteReemplaza;
-		String parteAñadida="";
+	    if (posicion < 0) posicion = 0;
+	    if (posicion > longitudOriginal) posicion = longitudOriginal;
 
-		if(posicion+longitudReemplazo<=longitudOriginal)
-		{
-			parteReemplaza=reemplazo;
-		}
-		else
-		{
-			parteReemplaza=reemplazo.substring(0,longitudOriginal-posicion);
-			parteAñadida=reemplazo.substring(longitudOriginal-posicion);
-		}
+	    int disponible = longitudOriginal - posicion;
 
-		return new String[] {parteReemplaza, parteAñadida};
+	    if (longitudReemplazo <= disponible)
+	    {
+	        return new String[] { reemplazo, "" };
+	    }
+
+	    if (disponible <= 0)
+	    {
+	        return new String[] { "", reemplazo };
+	    }
+
+	    String parteReemplaza = reemplazo.substring(0, disponible);
+	    String parteAñadida   = reemplazo.substring(disponible);
+
+	    return new String[] { parteReemplaza, parteAñadida };
 	}
-
+	
 	public MyConsoleStyle getStyle()
 	{
 		return style;
