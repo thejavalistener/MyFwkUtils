@@ -33,6 +33,32 @@ public class MyReflection
 
 	public static class clasz
 	{
+		public static List<Class<?>> getInnerClasses(Class<?> clazz)
+		{
+			return getInnerClasses(clazz,c->true);		
+		}
+
+		public static List<Class<?>> getInnerClasses(Class<?> clazz,Function<Class<?>,Boolean> includeInResult)
+		{
+			try
+			{
+				List<Class<?>> ret = new ArrayList<>();
+				for(Class<?> c:clazz.getDeclaredClasses())
+				if( includeInResult.apply(c) )
+				{
+					ret.add(c);
+				}
+				
+				return ret;				
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		}
+		
+		
 		public static Method getMethod(Class<?> clazz,String mtdName,List<Class<?>> argTypes)
 		{
 			Class<?>[] arrArgTypes = MyCollection.toArray(argTypes,Class.class);
@@ -233,6 +259,20 @@ public class MyReflection
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
+		}
+		
+		public static Object innerClassNewInstance(Object outerInstance, Class<?> inner)
+		{
+		    try
+		    {
+		        var ctor = inner.getDeclaredConstructor(outerInstance.getClass());
+		        ctor.setAccessible(true);
+		        return ctor.newInstance(outerInstance);
+		    }
+		    catch (Exception e)
+		    {
+		        throw new RuntimeException(e);
+		    }
 		}
 		
 		public static List<Field> getFields(Class<?> clazz,Function<Field,Boolean> filter)
