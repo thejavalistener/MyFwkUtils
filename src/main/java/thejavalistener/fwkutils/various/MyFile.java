@@ -99,4 +99,9 @@ public class MyFile
             throw new RuntimeException("Error escribiendo archivo: " + fullFileName, e);
         }
     }
+
+	public static String normalize(String path)
+	{
+		if (path == null) return null;
+	    return Paths.get(path).normalize().toString();	}
 }

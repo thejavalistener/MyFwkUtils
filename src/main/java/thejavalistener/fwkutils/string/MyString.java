@@ -25,15 +25,42 @@ public class MyString
 	{
 		return ts(26);
 	}
-	
+
 	public static int countDifferentChars(String s, char c)
 	{
 		return s.length()-charCount(s,c);
 	}
+	
+	public static String removeLinesWithPrefix(String s, String[] prefix, boolean ignoreLeftSpaces)
+	{
+		if(s==null||s.isEmpty()) return s;
+
+		StringBuilder sb=new StringBuilder();
+
+		String[] lines=s.split("\\R",-1); // conserva líneas vacías
+
+		outer:for(String line:lines)
+		{
+			String check=line;
+
+			if(ignoreLeftSpaces) check=check.replaceFirst("^[ \\t]+","");
+
+			for(String p:prefix)
+			{
+				if(p!=null&&!p.isEmpty()&&check.startsWith(p)) continue outer; // descarta
+																				// línea
+			}
+
+			sb.append(line).append(System.lineSeparator());
+		}
+
+		return sb.toString();
+	}
 
 	public static boolean isPrintableChar(char c)
 	{
-		return Character.isDigit(c)||Character.isAlphabetic(c)||isSymbol(c); //||c==' ';
+		return Character.isDigit(c)||Character.isAlphabetic(c)||isSymbol(c); // ||c=='
+																				// ';
 		// Character.UnicodeBlock block=Character.UnicodeBlock.of(c);
 		// return
 		// (!Character.isISOControl(c))&&c!=KeyEvent.CHAR_UNDEFINED&&block!=null&&block!=Character.UnicodeBlock.SPECIALS;
@@ -172,7 +199,7 @@ public class MyString
 
 		return false;
 	}
-	
+
 	public static int[] findParagraphBounds(String text, int index)
 	{
 		try
@@ -225,7 +252,7 @@ public class MyString
 		}
 
 	}
-	
+
 	public static List<String> wordList(String s)
 	{
 		return wordList(s,x -> x);
@@ -571,13 +598,15 @@ public class MyString
 
 		return aux;
 	}
-	
-	public static String remove(String s, String charsToRemove) {
-	    // Escapá los caracteres especiales de regex dentro de un "character class"
-	    String regex = "[" + Pattern.quote(charsToRemove) + "]";
-	    return s.replaceAll(regex, "");
+
+	public static String remove(String s, String charsToRemove)
+	{
+		// Escapá los caracteres especiales de regex dentro de un "character
+		// class"
+		String regex="["+Pattern.quote(charsToRemove)+"]";
+		return s.replaceAll(regex,"");
 	}
-	
+
 	public static String replace(String s, Function<Character,Character> func)
 	{
 		StringBuffer sb=new StringBuffer();
@@ -880,17 +909,17 @@ public class MyString
 
 		return null;
 	}
-	
-	public static Integer parseInteger(String text,Integer defValue)
+
+	public static Integer parseInteger(String text, Integer defValue)
 	{
-		if( text==null || text.isEmpty() )
+		if(text==null||text.isEmpty())
 		{
 			return defValue;
 		}
-		
+
 		try
 		{
-			if( defValue==null )
+			if(defValue==null)
 			{
 				return null;
 			}
@@ -904,7 +933,6 @@ public class MyString
 			return defValue;
 		}
 	}
-
 
 	public static Date parseSqlDate(String s)
 	{
@@ -1005,12 +1033,11 @@ public class MyString
 			return s;
 		}
 	}
-	
-	public static String ifEmpty(String s,String defaultIfEmpty)
+
+	public static String ifEmpty(String s, String defaultIfEmpty)
 	{
 		return s!=null&&s.trim().isEmpty()?defaultIfEmpty:s;
 	}
-
 
 	public static String ifNull(Object o, String defaultIfNull)
 	{
@@ -1284,66 +1311,69 @@ public class MyString
 			return false;
 		}
 	}
-	
+
 	public static String normalize(String s)
 	{
-	    String normalizado = Normalizer.normalize(s, Normalizer.Form.NFD);
-	    return normalizado.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+		String normalizado=Normalizer.normalize(s,Normalizer.Form.NFD);
+		return normalizado.replaceAll("\\p{InCombiningDiacriticalMarks}+","");
 	}
 
 	public static String removeSuffix(String s, String suff)
 	{
 		return s.endsWith(suff)?s.substring(0,s.lastIndexOf(suff)):s;
 	}
-	
-	public static String join(List<String> list, String sep) {
-	    if (list == null || list.isEmpty()) {
-	        return "";
-	    }
-	    StringBuilder sb = new StringBuilder();
-	    for (int i = 0; i < list.size(); i++) {
-	        sb.append(list.get(i));
-	        if (i < list.size() - 1) {
-	            sb.append(sep);
-	        }
-	    }
-	    return sb.toString();
+
+	public static String join(List<String> list, String sep)
+	{
+		if(list==null||list.isEmpty())
+		{
+			return "";
+		}
+		StringBuilder sb=new StringBuilder();
+		for(int i=0; i<list.size(); i++)
+		{
+			sb.append(list.get(i));
+			if(i<list.size()-1)
+			{
+				sb.append(sep);
+			}
+		}
+		return sb.toString();
 	}
 
-	public static String join(String[] array, String sep) 
+	public static String join(String[] array, String sep)
 	{
 		return join(List.of(array),sep);
 	}
 
 	public static String left(String s, int length)
 	{
-		String x= s.length()<length?s:s.substring(0,length);
+		String x=s.length()<length?s:s.substring(0,length);
 		return rpad(x,' ',length);
 	}
 
-	public static String right(String s,int length)
+	public static String right(String s, int length)
 	{
-		String x= s.length()<length?s:s.substring(0,length);
+		String x=s.length()<length?s:s.substring(0,length);
 		return lpad(x,' ',length);
 	}
-	
+
 	public static int digits(long n)
 	{
-		long x = Math.abs(n);
+		long x=Math.abs(n);
 		return Long.toString(x).length();
 	}
-	
+
 	public static String trimMiddle(String s, int len)
 	{
-	    if (s.length() <= len) return s;
+		if(s.length()<=len) return s;
 
-	    int remove = s.length() - len;
+		int remove=s.length()-len;
 
-	    int startKeep = (s.length() - remove) / 2;
-	    int endKeepStart = startKeep + remove;
+		int startKeep=(s.length()-remove)/2;
+		int endKeepStart=startKeep+remove;
 
-	    return s.substring(0, startKeep) + s.substring(endKeepStart);
+		return s.substring(0,startKeep)+s.substring(endKeepStart);
 	}
 
-	
 }

@@ -246,6 +246,16 @@ public class MyReflection
 				throw new RuntimeException(e);
 			}
 		}
+		
+		/** Retorna c.getConstructor().newInstance() pero capturando la excepción */
+		public static <T> T newInstance(String clazzName)
+		{
+			Class<T> clazz = (Class<T>)forName(clazzName);
+			return newInstance(clazz);
+		}
+		
+		
+
 
 		/** Retorna c.getConstructor().newInstance() pero capturando la excepción */
 		public static <T> T newInstance(Class<T> c)
@@ -412,7 +422,7 @@ public class MyReflection
 			return "get"+MyString.switchCase(f.getName(),0);
 		}		
 	}
-	
+		
 	static class pkg
 	{
 		public static List<Class<?>> getClasses(String packageName,boolean recursive) 
