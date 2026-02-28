@@ -204,46 +204,55 @@ public abstract class MyConsoleBase
 		return contentPane;
 	}
 
-	private void _stringToCommand(String sCmd)
+//	private void _stringToCommand(String sCmd)
+//	{
+//		if(sCmd.equals("[b]"))
+//		{
+//			b();
+//			return;
+//		}
+//
+//		if(sCmd.equals("[i]"))
+//		{
+//			i();
+//			return;
+//		}
+//
+//		if(sCmd.equals("[x]"))
+//		{
+//			x();
+//			return;
+//		}
+//
+//		if(sCmd.startsWith("[fg("))
+//		{
+//			String sCol=MyString.extract(sCmd,"(",")")[0];
+//			fg(sCol.substring(1,sCol.length()-1));
+//			return;
+//		}
+//
+//		if(sCmd.startsWith("[bg("))
+//		{
+//			String sCol=MyString.extract(sCmd,"(",")")[0];
+//			bg(sCol.substring(1,sCol.length()-1));
+//			return;
+//		}
+//	}
+
+	public MyConsoleBase print(Object o)
 	{
-		if(sCmd.equals("[b]"))
-		{
-			b();
-			return;
-		}
-
-		if(sCmd.equals("[i]"))
-		{
-			i();
-			return;
-		}
-
-		if(sCmd.equals("[x]"))
-		{
-			x();
-			return;
-		}
-
-		if(sCmd.startsWith("[fg("))
-		{
-			String sCol=MyString.extract(sCmd,"(",")")[0];
-			fg(sCol.substring(1,sCol.length()-1));
-			return;
-		}
-
-		if(sCmd.startsWith("[bg("))
-		{
-			String sCol=MyString.extract(sCmd,"(",")")[0];
-			bg(sCol.substring(1,sCol.length()-1));
-			return;
-		}
+		return print(null,o);
 	}
 	
-	public MyConsoleBase print(Object o)
+	public MyConsoleBase print(Color instantLineColor,Object o)
 	{
 	    init();
 
 	    String s = o == null ? "null" : o.toString();
+
+	    // si hay un color instantaneo...
+        if( instantLineColor!=null) s = "[fg("+MyColor.toHTMLColor(instantLineColor)+")]"+s+"[x]";
+
 	    String[][] toPrint = _extractFormattedText(s);
 
 	    for (int i = 0; i < toPrint.length; i++)
@@ -253,12 +262,15 @@ public abstract class MyConsoleBase
 
 	        if (!style.isEmpty())
 	        {
-	            // cuántos estilos se aplicaron (ej: "[fg(orange)][b]" => 2)
+	        	
+	        	// cuántos estilos se aplicaron (ej: "[fg(orange)][b]" => 2)
 	            int toClose = MyString.extract(style, "[", "]").length;
 
+	            
+	            
 	            cs(style);        // push de todos los estilos
 	            _print(txt);      // imprime con esos estilos
-	            x(toClose);       // ⬅️ POP de todos los estilos aplicados
+	            x(toClose);       // POP de todos los estilos aplicados
 	        }
 	        else
 	        {
@@ -267,8 +279,7 @@ public abstract class MyConsoleBase
 	    }
 	    return this;
 	}
-	
-	
+
 	private MyConsoleBase _print(String s)
 	{
 		String[] reemAña=_reemplazarOAñadir(textPane.getText(),textPane.getCaretPosition(),s);
@@ -282,7 +293,7 @@ public abstract class MyConsoleBase
 		{
 			textPane.insertText(reemAña[1],textPane.getCaretPosition());
 		}
-
+		
 		return this;
 	}
 
@@ -405,28 +416,6 @@ public abstract class MyConsoleBase
 		}
 	}
 
-//	private static String[] _reemplazarOAñadir(String original, int posicion, String reemplazo)
-//	{
-//		int x=MyString.charCount(original,'\r');
-//		int longitudOriginal=original.length()-x;
-//		int longitudReemplazo=reemplazo.length();
-//
-//		String parteReemplaza;
-//		String parteAñadida="";
-//
-//		if(posicion+longitudReemplazo<=longitudOriginal)
-//		{
-//			parteReemplaza=reemplazo;
-//		}
-//		else
-//		{
-//			parteReemplaza=reemplazo.substring(0,longitudOriginal-posicion);
-//			parteAñadida=reemplazo.substring(longitudOriginal-posicion);
-//		}
-//
-//		return new String[] {parteReemplaza, parteAñadida};
-//	}
-
 	private static String[] _reemplazarOAñadir(String original, int posicion, String reemplazo)
 	{
 	    int longitudOriginal = original.length();
@@ -533,9 +522,10 @@ public abstract class MyConsoleBase
 		return this;
 	}
 
-	public MyConsoleBase println(Object s)
+	public MyConsoleBase println(Object s) {return println(null,s);}
+	public MyConsoleBase println(Color c,Object s)
 	{
-		print(s+"\n");
+		print(c,s+"\n");
 		return this;
 	}
 
@@ -713,8 +703,7 @@ public abstract class MyConsoleBase
 	
 	public int pressAnyKey()
 	{
-		return pressAnyKey(null,() -> {
-		});
+		return pressAnyKey(null,() -> {});
 	}
 
 	public int pressAnyKey(Runnable r)

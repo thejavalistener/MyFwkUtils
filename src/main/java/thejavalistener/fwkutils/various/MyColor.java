@@ -44,6 +44,11 @@ public class MyColor
 		}
 	}
 
+	public static String toHTMLColor(Color c)
+	{
+		return toHTMLColor(c.getRed(),c.getGreen(),c.getBlue());
+	}
+	
 	public static String toHTMLColor(int r, int g, int b)
 	{
 		return String.format("#%02X%02X%02X",r,g,b);
