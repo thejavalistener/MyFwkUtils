@@ -30,6 +30,7 @@ import java.util.function.Function;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
@@ -110,7 +111,8 @@ public class MyAwt
 			c.setEnabled(false);
 		}
 
-		for (Component comp : c.getComponents()) {
+		for (Component comp : c.getComponents()) 
+		{
 			if (!excluded.contains(comp)) {
 				if (!stateMap.containsKey(comp)) {
 					stateMap.put(comp, comp.isEnabled());
@@ -298,12 +300,6 @@ public class MyAwt
 		return showConfirmDialog(mssg,title,options,0,owner);
 	}
 	
-	public static void main(String[] args)
-	{
-		int x = showConfirmNO_YES("Pepe?","XX",null);
-		System.out.println(x);
-	}
-
 	public static void showErrorMessage(String mssg, String title, Container owner)
 	{
 		JOptionPane.showMessageDialog(owner,mssg,title,JOptionPane.ERROR_MESSAGE);

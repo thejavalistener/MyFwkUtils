@@ -522,7 +522,11 @@ public abstract class MyConsoleBase
 		return this;
 	}
 
-	public MyConsoleBase println(Object s) {return println(null,s);}
+	public MyConsoleBase println(Object s)
+	{
+		return println(null,s);
+	}
+	
 	public MyConsoleBase println(Color c,Object s)
 	{
 		print(c,s+"\n");
