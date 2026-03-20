@@ -166,21 +166,6 @@ public abstract class MyConsoleBase
 		scrollPane.setBorder(null);
 		contentPane.add(scrollPane,BorderLayout.CENTER);
 						
-//		textPane.addKeyListener(new EscuchaCTRLCyESC());
-//		if(contentPane instanceof Window || contentPane instanceof JFrame)
-//		{
-//			contentPane.add(scrollPane,BorderLayout.CENTER);
-//
-//			Window wcont=(Window)contentPane;
-//			MyAwt.setProportionalSize(.7,wcont,null);
-//			MyAwt.center(wcont,null);
-//
-//			EscuchaWindow escuchaWindow=new EscuchaWindow();
-//
-//			wcont.addWindowListener(escuchaWindow);
-//			wcont.addWindowFocusListener(escuchaWindow);
-//		}
-		
 		textPane.addMouseListener(new EscuchaMouse());
 
 		init();
@@ -204,46 +189,47 @@ public abstract class MyConsoleBase
 		return contentPane;
 	}
 
-//	private void _stringToCommand(String sCmd)
-//	{
-//		if(sCmd.equals("[b]"))
-//		{
-//			b();
-//			return;
-//		}
-//
-//		if(sCmd.equals("[i]"))
-//		{
-//			i();
-//			return;
-//		}
-//
-//		if(sCmd.equals("[x]"))
-//		{
-//			x();
-//			return;
-//		}
-//
-//		if(sCmd.startsWith("[fg("))
-//		{
-//			String sCol=MyString.extract(sCmd,"(",")")[0];
-//			fg(sCol.substring(1,sCol.length()-1));
-//			return;
-//		}
-//
-//		if(sCmd.startsWith("[bg("))
-//		{
-//			String sCol=MyString.extract(sCmd,"(",")")[0];
-//			bg(sCol.substring(1,sCol.length()-1));
-//			return;
-//		}
-//	}
-
 	public MyConsoleBase print(Object o)
 	{
 		return print(null,o);
 	}
 	
+//	public MyConsoleBase print(Color instantLineColor,Object o)
+//	{
+//	    init();
+//
+//	    String s = o == null ? "null" : o.toString();
+//
+//	    // si hay un color instantaneo...
+//        if( instantLineColor!=null) s = "[fg("+MyColor.toHTMLColor(instantLineColor)+")]"+s+"[x]";
+//
+//	    String[][] toPrint = _extractFormattedText(s);
+//
+//	    for (int i = 0; i < toPrint.length; i++)
+//	    {
+//	        String txt   = toPrint[i][0];
+//	        String style = toPrint[i][1];
+//
+//	        if (!style.isEmpty())
+//	        {
+//	        	
+//	        	// cuántos estilos se aplicaron (ej: "[fg(orange)][b]" => 2)
+//	            int toClose = MyString.extract(style, "[", "]").length;
+//
+//	            
+//	            
+//	            cs(style);        // push de todos los estilos
+//	            _print(txt);      // imprime con esos estilos
+//	            x(toClose);       // POP de todos los estilos aplicados
+//	        }
+//	        else
+//	        {
+//	            _print(txt);
+//	        }
+//	    }
+//	    return this;
+//	}
+
 	public MyConsoleBase print(Color instantLineColor,Object o)
 	{
 	    init();
@@ -251,7 +237,10 @@ public abstract class MyConsoleBase
 	    String s = o == null ? "null" : o.toString();
 
 	    // si hay un color instantaneo...
-        if( instantLineColor!=null) s = "[fg("+MyColor.toHTMLColor(instantLineColor)+")]"+s+"[x]";
+        if( instantLineColor!=null) 
+    	{
+        	fg(MyColor.toHTMLColor(instantLineColor));
+    	}
 
 	    String[][] toPrint = _extractFormattedText(s);
 
@@ -277,9 +266,17 @@ public abstract class MyConsoleBase
 	            _print(txt);
 	        }
 	    }
+	    
+        if( instantLineColor!=null) 
+    	{
+        	x();
+    	}
+
+	    
 	    return this;
 	}
-
+	
+	
 	private MyConsoleBase _print(String s)
 	{
 		String[] reemAña=_reemplazarOAñadir(textPane.getText(),textPane.getCaretPosition(),s);
